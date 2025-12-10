@@ -13,7 +13,7 @@ public class Cidade {
     @Column(name = "nome_cidade", nullable = false, length = 100)
     private String nome;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "uf")
     private Estado estado;
 }

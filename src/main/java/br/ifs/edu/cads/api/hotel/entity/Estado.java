@@ -1,8 +1,8 @@
 package br.ifs.edu.cads.api.hotel.entity;
 
 import jakarta.persistence.*;
-
-import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "estado")
@@ -18,8 +18,14 @@ public class Estado {
     @Column(name = "nome_estado", nullable = false, unique = true)
     private String nome;
 
-//    @OneToMany(mappedBy = "estado")
-//    private List<Cidade> cidades;
+    public Estado(){
+
+    }
+
+    public Estado(String nome, String uf) {
+        this.nome = nome;
+        this.uf = uf;
+    }
 
     public Long getId() {
         return id;
@@ -33,7 +39,11 @@ public class Estado {
         return nome;
     }
 
-//    public List<Cidade> getCidades() {
-//        return cidades;
-//    }
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 }
