@@ -15,14 +15,16 @@ import java.util.List;
 public class EstadoService {
 
     private final EstadoRepository estadoRepository;
+    private final EstadoMapper estadoMapper;
 
-    public EstadoService(EstadoRepository estadoRepository) {
+    public EstadoService(EstadoRepository estadoRepository, EstadoMapper estadoMapper) {
         this.estadoRepository = estadoRepository;
+        this.estadoMapper = estadoMapper;
     }
 
     public List<EstadoDto> findAllEstados() {
         List<EstadoDto> estados = estadoRepository.findAll().stream()
-                .map(EstadoMapper::toDto)
+                .map(estadoMapper::toDto)
                 .sorted(Comparator.comparing(EstadoDto::uf))
                 .toList();
 
@@ -30,9 +32,9 @@ public class EstadoService {
     }
 
     public EstadoDto createEstado(EstadoFormDto estadoFormDto) {
-        Estado newEstado = estadoRepository.save(EstadoMapper.formToEntity(estadoFormDto));
+        Estado newEstado = estadoRepository.save(estadoMapper.formToEntity(estadoFormDto));
 
-        return EstadoMapper.toDto(newEstado);
+        return estadoMapper.toDto(newEstado);
     }
 
     public void updateEstado(EstadoFormDto estadoFormDto, long id) {
@@ -51,6 +53,6 @@ public class EstadoService {
                 () -> new ResourceNotFoundException("Estado de id " + id + " não encontrado")
         );
 
-        return EstadoMapper.toDto(estado);
+        return estadoMapper.toDto(estado);
     }
 }

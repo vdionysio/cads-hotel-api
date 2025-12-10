@@ -3,7 +3,10 @@ package br.ifs.edu.cads.api.hotel.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cidade")
+@Table(
+    name = "cidade",
+    uniqueConstraints = { @UniqueConstraint(name = "UniqueUfAndNome", columnNames = { "nome_cidade", "uf" }) }
+)
 public class Cidade {
     @Id
     @Column(name = "id_cidade")
@@ -16,4 +19,24 @@ public class Cidade {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "uf")
     private Estado estado;
+
+    public Cidade() {
+    }
+
+    public Cidade(String nome, Estado estado) {
+        this.nome = nome;
+        this.estado = estado;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
 }

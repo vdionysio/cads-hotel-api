@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EstadoMapper {
-    public static EstadoDto toDto(Estado estado) {
+    public EstadoDto toDto(Estado estado) {
         return new EstadoDto(estado.getId(), estado.getNome(), estado.getUf());
     }
 
-    public static Estado formToEntity(EstadoFormDto estadoFormDto) {
-        return new Estado(estadoFormDto.nome(), estadoFormDto.uf());
+    public Estado formToEntity(EstadoFormDto estadoFormDto) {
+        return new Estado(estadoFormDto.nome(), estadoFormDto.uf().toUpperCase());
     }
 
 }
