@@ -2,9 +2,7 @@ package br.ifs.edu.cads.api.hotel.service;
 
 import br.ifs.edu.cads.api.hotel.dto.CidadeDto;
 import br.ifs.edu.cads.api.hotel.dto.CidadeFormDto;
-import br.ifs.edu.cads.api.hotel.dto.EstadoDto;
 import br.ifs.edu.cads.api.hotel.dto.mapper.CidadeMapper;
-import br.ifs.edu.cads.api.hotel.dto.mapper.EstadoMapper;
 import br.ifs.edu.cads.api.hotel.entity.Cidade;
 import br.ifs.edu.cads.api.hotel.entity.Estado;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
@@ -40,10 +38,32 @@ public class CidadeService {
 
     public CidadeDto createCidade(CidadeFormDto cidadeFormDto) {
         Estado estado = estadoRepository.findByUf(cidadeFormDto.uf()).orElseThrow(
-                () -> new ResourceNotFoundException("UF: " + cidadeFormDto.uf() + " não encontrada")
+                () -> new ResourceNotFoundException("UF " + cidadeFormDto.uf() + " não encontrada")
         );
         Cidade newCidade = cidadeRepository.save(cidadeMapper.formToEntity(cidadeFormDto, estado));
 
         return cidadeMapper.toDto(newCidade);
+    }
+
+    public void updateCidade(CidadeFormDto cidadeFormDto, Long id) {
+        Estado estado = estadoRepository.findByUf(cidadeFormDto.uf()).orElseThrow(
+                () -> new ResourceNotFoundException("UF " + cidadeFormDto.uf() + " não encontrada")
+        );
+        Cidade cidade = cidadeRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Cidade de id " + id + " não encontrada")
+        );
+
+        cidade.setNome(cidadeFormDto.nome());
+        cidade.setEstado(estado);
+
+        cidadeRepository.save(cidade);
+    }
+
+    public CidadeDto findById(Long id) {
+        Cidade cidade = cidadeRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Cidade de id " + id + " não encontrada")
+        );
+
+        return cidadeMapper.toDto(cidade);
     }
 }
