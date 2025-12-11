@@ -17,7 +17,7 @@ public class Cidade {
     private String nome;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "uf")
+    @JoinColumn(name = "uf", referencedColumnName = "uf")
     private Estado estado;
 
     public Cidade() {
