@@ -24,11 +24,4 @@ public class Usuario {
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = true;
-
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Funcionario funcionario;
-
-    @OneToOne
-    @JoinColumn(name = "hospede_id", nullable = true)
-    private Hospede hospede;
 }

@@ -7,21 +7,21 @@ import jakarta.persistence.*;
 @Table(name = "funcionario")
 public class Funcionario {
     @Id
-    @Column(name = "id_usuario")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_funcionario")
     private Long id;
 
     @Column(name = "nome_funcionario", nullable = false)
     private String nome;
 
-    @Column(name = "cpf", nullable = false, unique = true)
+    @Column(name = "cpf_funcionario", nullable = false, unique = true)
     private String cpf;
 
     @Column(name = "cargo", nullable = false)
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "id_usuario")
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", unique = true, nullable = false)
     private Usuario usuario;
 }
