@@ -13,6 +13,9 @@ public record FuncionarioFormDto(
         @CPF
         String cpf,
 
+        @NotNull
+        Cargo cargo,
+
         //Atributos usuario
         @NotNull
         @Email
@@ -20,9 +23,6 @@ public record FuncionarioFormDto(
 
         @NotEmpty
         @Size(min = 8, max = 8)
-        String senha,
-
-        @NotNull
-        Cargo cargo
+        String senha
 ) {
 }

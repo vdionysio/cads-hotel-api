@@ -2,6 +2,8 @@ package br.ifs.edu.cads.api.hotel.entity;
 
 import br.ifs.edu.cads.api.hotel.enums.Cargo;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Table(name = "funcionario")
@@ -24,4 +26,38 @@ public class Funcionario {
     @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", unique = true, nullable = false)
     private Usuario usuario;
+
+    public Funcionario() {
+
+    }
+
+    public Funcionario(String nome, String cpf, Cargo cargo) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.cargo = cargo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public Cargo getCargo() {
+        return cargo;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }
