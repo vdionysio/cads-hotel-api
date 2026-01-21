@@ -9,6 +9,8 @@ import br.ifs.edu.cads.api.hotel.repository.FuncionarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class FuncionarioService {
     private final FuncionarioRepository funcionarioRepository;
@@ -17,6 +19,14 @@ public class FuncionarioService {
     public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper) {
         this.funcionarioRepository = funcionarioRepository;
         this.funcionarioMapper = funcionarioMapper;
+    }
+
+    public List<FuncionarioDto> getFuncionarios() {
+        List<FuncionarioDto> funcionarios = funcionarioRepository.findAll().stream()
+                .map(funcionario -> funcionarioMapper.toDto(funcionario, funcionario.getUsuario()))
+                .toList();
+
+        return funcionarios;
     }
 
     @Transactional
