@@ -1,8 +1,6 @@
 package br.ifs.edu.cads.api.hotel.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "estado")

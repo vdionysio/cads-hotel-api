@@ -2,8 +2,6 @@ package br.ifs.edu.cads.api.hotel.entity;
 
 import br.ifs.edu.cads.api.hotel.enums.Cargo;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Table(name = "funcionario")

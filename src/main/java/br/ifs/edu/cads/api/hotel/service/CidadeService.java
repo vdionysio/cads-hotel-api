@@ -38,7 +38,7 @@ public class CidadeService {
 
     public CidadeDto createCidade(CidadeFormDto cidadeFormDto) {
         Estado estado = estadoRepository.findByUf(cidadeFormDto.uf()).orElseThrow(
-                () -> new ResourceNotFoundException("UF " + cidadeFormDto.uf() + " não encontrada")
+                () -> new ResourceNotFoundException("UF " + cidadeFormDto.uf() + " não encontrada.")
         );
         Cidade newCidade = cidadeRepository.save(cidadeMapper.formToEntity(cidadeFormDto, estado));
 

@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FuncionarioMapper {
-    public FuncionarioDto toDto(Funcionario funcionario, Usuario usuario) {
+    public FuncionarioDto toDto(Funcionario funcionario) {
         return new FuncionarioDto(
                 funcionario.getId(),
                 funcionario.getNome(),
                 funcionario.getCpf(),
                 funcionario.getCargo(),
-                usuario.getEmail()
+                funcionario.getUsuario().getEmail()
         );
     }
 

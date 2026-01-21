@@ -4,7 +4,9 @@ import br.ifs.edu.cads.api.hotel.dto.FuncionarioDto;
 import br.ifs.edu.cads.api.hotel.dto.FuncionarioFormDto;
 import br.ifs.edu.cads.api.hotel.service.FuncionarioService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/funcionarios")
+@Validated
 public class FuncionarioController {
     private final FuncionarioService funcionarioService;
 
@@ -30,5 +33,12 @@ public class FuncionarioController {
         FuncionarioDto funcionarioDto = funcionarioService.createFuncionario(funcionarioFormDto);
         URI location = URI.create("/api/funcionarios" + funcionarioDto.id());
         return ResponseEntity.created(location).body(funcionarioDto);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<FuncionarioDto> getFuncionarioByEmail(@Valid @PathVariable @Email String email) {
+        FuncionarioDto funcionarioDto = funcionarioService.findFuncionarioByEmail(email);
+
+        return ResponseEntity.ok(funcionarioDto);
     }
 }

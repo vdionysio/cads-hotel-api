@@ -5,6 +5,7 @@ import br.ifs.edu.cads.api.hotel.dto.FuncionarioFormDto;
 import br.ifs.edu.cads.api.hotel.dto.mapper.FuncionarioMapper;
 import br.ifs.edu.cads.api.hotel.entity.Funcionario;
 import br.ifs.edu.cads.api.hotel.entity.Usuario;
+import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.FuncionarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class FuncionarioService {
 
     public List<FuncionarioDto> getFuncionarios() {
         List<FuncionarioDto> funcionarios = funcionarioRepository.findAll().stream()
-                .map(funcionario -> funcionarioMapper.toDto(funcionario, funcionario.getUsuario()))
+                .map(funcionarioMapper::toDto)
                 .toList();
 
         return funcionarios;
@@ -38,6 +39,15 @@ public class FuncionarioService {
         funcionario.setUsuario(usuario);
 
         Funcionario newFuncionario = funcionarioRepository.save(funcionario);
-        return funcionarioMapper.toDto(newFuncionario, usuario);
+        return funcionarioMapper.toDto(newFuncionario);
+    }
+
+    @Transactional
+    public FuncionarioDto findFuncionarioByEmail(String email) {
+        Funcionario funcionario = funcionarioRepository.findByUsuarioEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("Funcionário de email " + email + " não encontrado.")
+        );
+
+        return funcionarioMapper.toDto(funcionario);
     }
 }
