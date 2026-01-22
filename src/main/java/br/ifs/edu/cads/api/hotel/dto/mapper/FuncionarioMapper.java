@@ -3,7 +3,6 @@ package br.ifs.edu.cads.api.hotel.dto.mapper;
 import br.ifs.edu.cads.api.hotel.dto.FuncionarioDto;
 import br.ifs.edu.cads.api.hotel.dto.FuncionarioFormDto;
 import br.ifs.edu.cads.api.hotel.entity.Funcionario;
-import br.ifs.edu.cads.api.hotel.entity.Usuario;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,6 +18,7 @@ public class FuncionarioMapper {
     }
 
     public Funcionario formToEntity(FuncionarioFormDto funcionarioFormDto) {
+
         return new Funcionario(
                 funcionarioFormDto.nome(),
                 funcionarioFormDto.cpf(),

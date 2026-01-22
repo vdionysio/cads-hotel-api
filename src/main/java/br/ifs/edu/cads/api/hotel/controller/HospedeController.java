@@ -2,6 +2,8 @@ package br.ifs.edu.cads.api.hotel.controller;
 
 import br.ifs.edu.cads.api.hotel.dto.HospedeDto;
 import br.ifs.edu.cads.api.hotel.dto.HospedeFormDto;
+import br.ifs.edu.cads.api.hotel.dto.HospedeUsuarioDto;
+import br.ifs.edu.cads.api.hotel.dto.HospedeUsuarioFormDto;
 import br.ifs.edu.cads.api.hotel.service.HospedeService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +28,12 @@ public class HospedeController {
         HospedeDto hospedeDto = hospedeService.createHospede(hospedeFormDto);
         URI location = URI.create("/api/hospedes" + hospedeDto.id());
         return ResponseEntity.created(location).body(hospedeDto);
+    }
+
+    @PostMapping("/usuario")
+    public ResponseEntity<HospedeUsuarioDto> createHospedeUsuario(@RequestBody @Valid HospedeUsuarioFormDto hospedeUsuarioFormDto) {
+        HospedeUsuarioDto hospedeUsuarioDto = hospedeService.createHospedeUsuario(hospedeUsuarioFormDto);
+        URI location = URI.create("/api/hospedes" + hospedeUsuarioDto.dadosPessoais().id());
+        return ResponseEntity.created(location).body(hospedeUsuarioDto);
     }
 }

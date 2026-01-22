@@ -26,14 +26,22 @@ public class Usuario {
     @Column(name = "ativo", nullable = false)
     private Boolean ativo = true;
 
-    public Usuario(String email, String senha, Cargo cargo) {
+    public Usuario() {
+    }
+
+    public Usuario(String email, String senha) {
         this.email = email;
         this.senha = senha;
+    }
+
+    public Usuario(String email, String senha, Cargo cargo) {
+        this(email, senha);
         this.papel = PapelUsuario.valueOf(cargo.toString());
     }
 
-    public Usuario() {
-
+    public Usuario(String email, String senha, PapelUsuario papel) {
+        this(email, senha);
+        this.papel = papel;
     }
 
     public String getEmail() {
