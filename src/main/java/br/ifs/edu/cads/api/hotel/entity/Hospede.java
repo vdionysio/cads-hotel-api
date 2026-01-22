@@ -33,6 +33,48 @@ public class Hospede {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario", unique = true)
     private Usuario usuario;
 
+    public Hospede() {}
 
+    public Hospede(String nome, String cpf, LocalDate dataNascimento, String telefone) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.telefone = telefone;
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public Cidade getCidade() {
+        return cidade;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }
