@@ -26,6 +26,7 @@ public class CategoriaQuarto {
     @Column(name = "valor_diaria", nullable = false)
     private BigDecimal valorDiaria;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "posicao_quarto")
     private PosicaoQuarto posicaoQuarto;
 
@@ -34,4 +35,48 @@ public class CategoriaQuarto {
 
     @OneToMany
     private List<Comodidade> comodidades;
+
+    public CategoriaQuarto(String nome, String descricao, Integer maxHospedes, BigDecimal valorDiaria, PosicaoQuarto posicaoQuarto) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.maxHospedes = maxHospedes;
+        this.valorDiaria = valorDiaria;
+        this.posicaoQuarto = posicaoQuarto;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public Integer getMaxHospedes() {
+        return maxHospedes;
+    }
+
+    public BigDecimal getValorDiaria() {
+        return valorDiaria;
+    }
+
+    public PosicaoQuarto getPosicaoQuarto() {
+        return posicaoQuarto;
+    }
+
+    public List<Quarto> getQuartos() {
+        return quartos;
+    }
+
+    public List<Comodidade> getComodidades() {
+        return comodidades;
+    }
+
+    public void setComodidades(List<Comodidade> comodidades) {
+        this.comodidades = comodidades;
+    }
 }

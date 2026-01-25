@@ -19,3 +19,11 @@ INSERT INTO "PUBLIC"."COMODIDADE" VALUES
 (1, 'Ar condicionado 9000 btus', 'Ar Condicionado'),
 (2, 'Frigobar 45 L', 'Frigobar 45 L'),
 (3, 'Banheira de hidromassagem', 'Banheira de hidromassagem');
+
+INSERT INTO "PUBLIC"."CATEGORIA_QUARTO" VALUES
+(1, 'Quarto Luxo Casal', 2, 'Luxo Casal', 'EXTERNA', 1200.00);
+
+INSERT INTO "PUBLIC"."CATEGORIA_QUARTO_COMODIDADES" VALUES
+(1, 1),
+(1, 2),
+(1, 3);

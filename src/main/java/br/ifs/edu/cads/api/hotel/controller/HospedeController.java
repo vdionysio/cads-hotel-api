@@ -26,14 +26,14 @@ public class HospedeController {
     @PostMapping
     public ResponseEntity<HospedeDto> createHospede(@RequestBody @Valid HospedeFormDto hospedeFormDto) {
         HospedeDto hospedeDto = hospedeService.createHospede(hospedeFormDto);
-        URI location = URI.create("/api/hospedes" + hospedeDto.id());
+        URI location = URI.create("/api/hospedes/" + hospedeDto.id());
         return ResponseEntity.created(location).body(hospedeDto);
     }
 
     @PostMapping("/usuario")
     public ResponseEntity<HospedeUsuarioDto> createHospedeUsuario(@RequestBody @Valid HospedeUsuarioFormDto hospedeUsuarioFormDto) {
         HospedeUsuarioDto hospedeUsuarioDto = hospedeService.createHospedeUsuario(hospedeUsuarioFormDto);
-        URI location = URI.create("/api/hospedes" + hospedeUsuarioDto.dadosPessoais().id());
+        URI location = URI.create("/api/hospedes/" + hospedeUsuarioDto.dadosPessoais().id());
         return ResponseEntity.created(location).body(hospedeUsuarioDto);
     }
 }

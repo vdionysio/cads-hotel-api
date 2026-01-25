@@ -26,4 +26,23 @@ public class Quarto {
     @Enumerated(EnumType.STRING)
     private StatusQuarto statusQuarto;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public Integer getNumBloco() {
+        return numBloco;
+    }
+
+    public Integer getNumAndar() {
+        return numAndar;
+    }
+
+    public CategoriaQuarto getCategoria() {
+        return categoria;
+    }
+
+    public StatusQuarto getStatusQuarto() {
+        return statusQuarto;
+    }
 }

@@ -24,7 +24,7 @@ public class ComodidadeController {
     @PostMapping
     public ResponseEntity<ComodidadeDto> createComodidade(@RequestBody @Valid ComodidadeFormDto comodidadeFormDto) {
         ComodidadeDto comodidadeDto = comodidadeService.createComodidade(comodidadeFormDto);
-        URI location = URI.create("api/comodidades" + comodidadeDto.id());
+        URI location = URI.create("api/comodidades/" + comodidadeDto.id());
         return ResponseEntity.created(location).body(comodidadeDto);
     }
 }

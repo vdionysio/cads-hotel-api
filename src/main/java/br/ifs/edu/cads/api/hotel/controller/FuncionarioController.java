@@ -31,7 +31,7 @@ public class FuncionarioController {
     @PostMapping
     public ResponseEntity<FuncionarioDto> createFuncionario(@RequestBody @Valid FuncionarioFormDto funcionarioFormDto) {
         FuncionarioDto funcionarioDto = funcionarioService.createFuncionario(funcionarioFormDto);
-        URI location = URI.create("/api/funcionarios" + funcionarioDto.id());
+        URI location = URI.create("/api/funcionarios/" + funcionarioDto.id());
         return ResponseEntity.created(location).body(funcionarioDto);
     }
 
