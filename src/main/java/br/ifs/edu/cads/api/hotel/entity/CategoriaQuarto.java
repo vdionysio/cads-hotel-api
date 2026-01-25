@@ -36,6 +36,10 @@ public class CategoriaQuarto {
     @OneToMany
     private List<Comodidade> comodidades;
 
+    public CategoriaQuarto() {
+
+    }
+
     public CategoriaQuarto(String nome, String descricao, Integer maxHospedes, BigDecimal valorDiaria, PosicaoQuarto posicaoQuarto) {
         this.nome = nome;
         this.descricao = descricao;

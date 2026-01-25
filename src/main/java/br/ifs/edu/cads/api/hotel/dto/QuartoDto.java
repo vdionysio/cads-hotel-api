@@ -8,6 +8,8 @@ public record QuartoDto(
 
         Integer id,
 
+        Integer numApartamento,
+
         Integer numBloco,
 
         Integer numAndar,

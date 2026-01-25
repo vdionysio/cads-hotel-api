@@ -4,13 +4,24 @@ import br.ifs.edu.cads.api.hotel.enums.StatusQuarto;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "quarto")
+@Table(
+    name = "quarto",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_quarto_ap_bloco_andar",
+            columnNames = {"num_apartamento", "num_bloco", "num_andar"}
+        )
+    }
+)
 public class Quarto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_quarto")
     private Integer id;
+
+    @Column(name = "num_apartamento", nullable = false)
+    private Integer numApartamento;
 
     @Column(name = "num_bloco", nullable = false)
     private Integer numBloco;
@@ -26,8 +37,22 @@ public class Quarto {
     @Enumerated(EnumType.STRING)
     private StatusQuarto statusQuarto;
 
+    public Quarto() {
+    }
+
+    public Quarto(Integer numApartamento, Integer numBloco, Integer numAndar, StatusQuarto statusQuarto) {
+        this.numApartamento = numApartamento;
+        this.numBloco = numBloco;
+        this.numAndar = numAndar;
+        this.statusQuarto = statusQuarto;
+    }
+
     public Integer getId() {
         return id;
+    }
+
+    public Integer getNumApartamento() {
+        return numApartamento;
     }
 
     public Integer getNumBloco() {
@@ -44,5 +69,9 @@ public class Quarto {
 
     public StatusQuarto getStatusQuarto() {
         return statusQuarto;
+    }
+
+    public void setCategoria(CategoriaQuarto categoria) {
+        this.categoria = categoria;
     }
 }
