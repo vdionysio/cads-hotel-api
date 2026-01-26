@@ -33,7 +33,12 @@ public class CategoriaQuarto {
     @OneToMany(mappedBy = "categoria")
     private List<Quarto> quartos;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "categoria_quarto_comodidade",
+            joinColumns = @JoinColumn(name = "id_categoria"),
+            inverseJoinColumns = @JoinColumn(name = "id_comodidade")
+    )
     private List<Comodidade> comodidades;
 
     public CategoriaQuarto() {

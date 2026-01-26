@@ -1,29 +1,224 @@
-INSERT INTO "PUBLIC"."ESTADO" VALUES
-(1, 'Sao Paulo', 'SP');
+-- ==================================================================================
+-- 1. LIMPEZA (Opcional, caso queira resetar tudo antes)
+-- ==================================================================================
+DELETE FROM CONVIDADO_RESERVA;
+DELETE FROM RESERVA;
+DELETE FROM QUARTO;
+DELETE FROM CATEGORIA_QUARTO_COMODIDADE;
+DELETE FROM COMODIDADE;
+DELETE FROM CATEGORIA_QUARTO;
+DELETE FROM HOSPEDE;
+DELETE FROM FUNCIONARIO;
+DELETE FROM USUARIO;
+DELETE FROM CIDADE;
+DELETE FROM ESTADO;
 
-INSERT INTO "PUBLIC"."CIDADE" VALUES
-(1, 'Botucatu', 'SP');
+-- ==================================================================================
+-- 2. ESTADOS E CIDADES
+-- ==================================================================================
+INSERT INTO ESTADO (NOME_ESTADO, UF) VALUES
+                                         ('São Paulo', 'SP'),
+                                         ('Rio de Janeiro', 'RJ'),
+                                         ('Minas Gerais', 'MG'),
+                                         ('Bahia', 'BA'),
+                                         ('Santa Catarina', 'SC');
 
-INSERT INTO "PUBLIC"."USUARIO" VALUES
-(1, TRUE, 'lucio.souza@cadshotel.com', 'RECEPCIONISTA', '12345678'),
-(2, TRUE, 'catiussia.lima@gmail.com', 'HOSPEDE', '12345678');
+INSERT INTO CIDADE (NOME_CIDADE, UF) VALUES
+                                         ('São Paulo', 'SP'),
+                                         ('Botucatu', 'SP'),
+                                         ('Campinas', 'SP'),
+                                         ('Rio de Janeiro', 'RJ'),
+                                         ('Belo Horizonte', 'MG'),
+                                         ('Salvador', 'BA'),
+                                         ('Florianópolis', 'SC');
 
-INSERT INTO "PUBLIC"."FUNCIONARIO" VALUES
-(1, 'RECEPCIONISTA', '558.716.150-15', 'Lucio Souza', 1);            
+-- ==================================================================================
+-- 3. USUÁRIOS (Login do Sistema)
+-- Senha padrão '123456' para todos
+-- ==================================================================================
+INSERT INTO USUARIO (ATIVO, EMAIL, SENHA, PAPEL_USUARIO) VALUES
+-- Staff
+(TRUE, 'admin@hotel.com', '123456', 'GERENTE'),
+(TRUE, 'lucio@hotel.com', '123456', 'RECEPCIONISTA'),
+(TRUE, 'ana@hotel.com', '123456', 'RECEPCIONISTA'),
+-- Hóspedes com acesso ao sistema
+(TRUE, 'roberto@gmail.com', '123456', 'HOSPEDE'),
+(TRUE, 'fernanda@gmail.com', '123456', 'HOSPEDE'),
+(TRUE, 'joao.silva@hotmail.com', '123456', 'HOSPEDE');
 
-INSERT INTO "PUBLIC"."HOSPEDE" VALUES
-(1, '43627306805', DATE '1995-01-20', 'Vinicius Dionysio', '(14) 99677-9702', 1, NULL),
-(2, '827.378.530-01', DATE '1993-01-01', 'Catiussia Lima', '(15) 99999-9999', 1, 2);
+-- ==================================================================================
+-- 4. FUNCIONÁRIOS
+-- ==================================================================================
+INSERT INTO FUNCIONARIO (NOME_FUNCIONARIO, CPF_FUNCIONARIO, CARGO, ID_USUARIO) VALUES
+('Carlos Gerente', '111.111.111-11', 'GERENTE', (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'admin@hotel.com')),
+('Lucio Souza', '222.222.222-22', 'RECEPCIONISTA', (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'lucio@hotel.com')),
+('Ana Clara', '333.333.333-33', 'RECEPCIONISTA', (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'ana@hotel.com'));
 
-INSERT INTO "PUBLIC"."COMODIDADE" VALUES
-(1, 'Ar condicionado 9000 btus', 'Ar Condicionado'),
-(2, 'Frigobar 45 L', 'Frigobar 45 L'),
-(3, 'Banheira de hidromassagem', 'Banheira de hidromassagem');
+-- ==================================================================================
+-- 5. HÓSPEDES
+-- Alguns linkados a usuários (App), outros apenas cadastro local (Balcão)
+-- ==================================================================================
+INSERT INTO HOSPEDE (NOME_HOSPEDE, CPF_HOSPEDE, DATA_NASCIMENTO, TELEFONE_HOSPEDE, ID_CIDADE, ID_USUARIO) VALUES
+-- Hóspedes com Login
+('Roberto Almeida', '436.273.068-05', '1995-01-20', '(14) 99677-9702', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Botucatu'), (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'roberto@gmail.com')),
+('Fernanda Costa', '827.378.530-01', '1993-05-15', '(15) 99999-9999', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Botucatu'), (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'fernanda@gmail.com')),
+('João Silva', '999.888.777-66', '1980-12-10', '(11) 98888-7777', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'São Paulo'), (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'joao.silva@hotmail.com')),
+-- Hóspedes sem Login (Cadastrados na recepção)
+('Maria Oliveira', '555.444.333-22', '1975-03-25', '(21) 97777-6666', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Rio de Janeiro'), NULL),
+('Pedro Santos', '111.222.333-44', '1990-07-07', '(31) 96666-5555', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Belo Horizonte'), NULL);
 
-INSERT INTO "PUBLIC"."CATEGORIA_QUARTO" VALUES
-(1, 'Quarto Luxo Casal', 2, 'Luxo Casal', 'EXTERNA', 1200.00);
+-- ==================================================================================
+-- 6. COMODIDADES E CATEGORIAS
+-- ==================================================================================
+INSERT INTO COMODIDADE (NOME_COMODIDADE, DESCRICAO_COMODIDADE) VALUES
+('Wi-Fi', 'Internet de alta velocidade fibra ótica'),
+('Ar Condicionado', 'Split 12000 BTUs'),
+('TV Cabo', 'Smart TV 50 polegadas com canais a cabo'),
+('Frigobar', 'Frigobar abastecido'),
+('Hidromassagem', 'Banheira de hidromassagem para casal'),
+('Vista Mar', 'Varanda com vista para o mar'),
+('Cofre', 'Cofre digital para notebook'),
+('Mesa de Trabalho', 'Mesa ergonômica para home office');
 
-INSERT INTO "PUBLIC"."CATEGORIA_QUARTO_COMODIDADES" VALUES
-(1, 1),
-(1, 2),
-(1, 3);
+INSERT INTO CATEGORIA_QUARTO (NOME_CATEGORIA, DESCRICAO_CATEGORIA, MAX_HOSPEDES, VALOR_DIARIA, POSICAO_QUARTO) VALUES
+('Standard', 'Quarto econômico ideal para solteiros ou casais rápidos', 2, 150.00, 'INTERNA'),
+('Master', 'Quarto espaçoso com vista para o jardim', 3, 280.00, 'EXTERNA'),
+('Deluxe', 'Suíte completa com hidromassagem', 2, 450.00, 'EXTERNA'),
+('Presidencial', 'Experiência de luxo no último andar', 4, 1200.00, 'EXTERNA');
+
+-- Vinculando Comodidades às Categorias
+-- Standard: Wifi, Ar, TV
+INSERT INTO CATEGORIA_QUARTO_COMODIDADE (ID_CATEGORIA, ID_COMODIDADE) VALUES
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'Wi-Fi')),
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'Ar Condicionado')),
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'TV Cabo'));
+
+-- Deluxe: Tudo do Standard + Frigobar + Hidro + Vista Mar
+INSERT INTO CATEGORIA_QUARTO_COMODIDADE (ID_CATEGORIA, ID_COMODIDADE) VALUES
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'Wi-Fi')),
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'Ar Condicionado')),
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'TV Cabo')),
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'Frigobar')),
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'Hidromassagem')),
+((SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'), (SELECT ID_COMODIDADE FROM COMODIDADE WHERE NOME_COMODIDADE = 'Vista Mar'));
+
+-- ==================================================================================
+-- 7. QUARTOS (INVENTÁRIO)
+-- Bloco 1: Standard (Térreo) e Master (1º Andar)
+-- Bloco 2: Deluxe (Cobertura)
+-- ==================================================================================
+INSERT INTO QUARTO (NUM_BLOCO, NUM_ANDAR, NUM_APARTAMENTO, ID_CATEGORIA, STATUS_QUARTO) VALUES
+-- Standard (Bloco 1, Térreo)
+(1, 0, 101, (SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'), 'DISPONIVEL'),
+(1, 0, 102, (SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'), 'DISPONIVEL'),
+(1, 0, 103, (SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'), 'OCUPADO'), -- Ocupado por hóspede atual
+(1, 0, 104, (SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'), 'BLOQUEADO'), -- Manutenção
+
+-- Master (Bloco 1, 1º Andar)
+(1, 1, 201, (SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Master'), 'DISPONIVEL'),
+(1, 1, 202, (SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Master'), 'DISPONIVEL'),
+
+-- Deluxe (Bloco 2, Cobertura)
+(2, 5, 501, (SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'), 'DISPONIVEL'),
+(2, 5, 502, (SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'), 'OCUPADO');
+
+-- ==================================================================================
+-- 8. RESERVAS (COM HORÁRIOS PADRONIZADOS: CHECK-IN 14h / CHECK-OUT 12h)
+-- ==================================================================================
+
+-- CENÁRIO 1: Reserva Finalizada (Checkout feito) - Quarto 102 (Standard)
+-- Roberto ficou semana passada (Datas estáticas já estavam corretas)
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+('2023-10-01 14:00:00', '2023-10-05 12:00:00', '2023-10-01 14:15:00', '2023-10-05 11:30:00', 600.00, 'CREDITO', 'CHECKOUT',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'),
+(SELECT ID_QUARTO FROM QUARTO WHERE NUM_APARTAMENTO = 102),
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'Roberto%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Lucio%'));
+
+-- CENÁRIO 2: Reserva Ativa (Checkin feito) - Quarto 103 (Standard)
+-- Fernanda está no hotel agora
+-- AJUSTE: Início Hoje às 14:00 | Fim Daqui a 3 dias às 12:00
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+(DATEADD('HOUR', 14, CAST(CURRENT_DATE AS TIMESTAMP)), DATEADD('HOUR', 12, CAST(DATEADD('DAY', 3, CURRENT_DATE) AS TIMESTAMP)), CURRENT_TIMESTAMP, NULL, 450.00, 'PIX', 'CHECKIN',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'),
+(SELECT ID_QUARTO FROM QUARTO WHERE NUM_APARTAMENTO = 103),
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'Fernanda%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Ana%'));
+
+-- CENÁRIO 3: Reserva Futura Confirmada (SEM Quarto atribuído ainda)
+-- João Silva chega mês que vem.
+-- AJUSTE: Início Daqui 1 mês às 14:00 | Fim Daqui 1 mês e 5 dias às 12:00
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+(DATEADD('HOUR', 14, CAST(DATEADD('MONTH', 1, CURRENT_DATE) AS TIMESTAMP)), DATEADD('HOUR', 12, CAST(DATEADD('DAY', 5, DATEADD('MONTH', 1, CURRENT_DATE)) AS TIMESTAMP)), NULL, NULL, 1400.00, 'CREDITO', 'RESERVADO',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Master'),
+NULL, -- Quarto ainda não definido!
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'João%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Lucio%'));
+
+-- CENÁRIO 4: Reserva Cancelada
+-- Pedro cancelou
+-- AJUSTE: Início Daqui 10 dias às 14:00 | Fim Daqui 12 dias às 12:00
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+(DATEADD('HOUR', 14, CAST(DATEADD('DAY', 10, CURRENT_DATE) AS TIMESTAMP)), DATEADD('HOUR', 12, CAST(DATEADD('DAY', 12, CURRENT_DATE) AS TIMESTAMP)), NULL, NULL, 300.00, 'DINHEIRO', 'CANCELADO',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'),
+NULL,
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'Pedro%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Lucio%'));
+
+-- ==================================================================================
+-- MAIS RESERVAS (HISTÓRICO E FUTURO)
+-- ==================================================================================
+
+-- 5. HISTÓRICO: Maria Oliveira (sem login) ficou em um Standard mês passado
+-- Datas estáticas mantidas (14h e 12h)
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+('2023-09-10 14:00:00', '2023-09-12 12:00:00', '2023-09-10 15:30:00', '2023-09-12 10:00:00', 300.00, 'DINHEIRO', 'CHECKOUT',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'),
+(SELECT ID_QUARTO FROM QUARTO WHERE NUM_APARTAMENTO = 101),
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'Maria%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Lucio%'));
+
+-- 6. FUTURO: Pedro Santos reservou um Master para o Natal
+-- Datas estáticas mantidas (14h e 12h)
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+('2023-12-24 14:00:00', '2023-12-27 12:00:00', NULL, NULL, 840.00, 'CREDITO', 'RESERVADO',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Master'),
+NULL,
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'Pedro%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Ana%'));
+
+-- 7. CANCELADO: João Silva tentou reservar um Deluxe mas desistiu
+-- Datas estáticas mantidas (14h e 12h)
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+('2023-08-01 14:00:00', '2023-08-05 12:00:00', NULL, NULL, 1800.00, 'PIX', 'CANCELADO',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Deluxe'),
+NULL,
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'João%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Carlos%'));
+
+-- 8. FUTURO COM QUARTO: Roberto Almeida (cliente fiel) para semana que vem
+-- AJUSTE: Início Daqui 7 dias às 14:00 | Fim Daqui 10 dias às 12:00
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+(DATEADD('HOUR', 14, CAST(DATEADD('DAY', 7, CURRENT_DATE) AS TIMESTAMP)), DATEADD('HOUR', 12, CAST(DATEADD('DAY', 10, CURRENT_DATE) AS TIMESTAMP)), NULL, NULL, 840.00, 'VOUCHER', 'RESERVADO',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Master'),
+(SELECT ID_QUARTO FROM QUARTO WHERE NUM_APARTAMENTO = 201),
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'Roberto%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Lucio%'));
+
+-- 9. HISTÓRICO ANTIGO: Fernanda Costa no Reveillon
+-- Datas estáticas mantidas (14h e 12h)
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+('2022-12-31 14:00:00', '2023-01-02 12:00:00', '2022-12-31 18:00:00', '2023-01-02 11:00:00', 2400.00, 'CREDITO', 'CHECKOUT',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Presidencial'),
+NULL,
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'Fernanda%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Carlos%'));
+
+-- 10. CHECKIN HOJE: Walk-in do Pedro Santos
+-- AJUSTE: Início Hoje às 14:00 | Fim Amanhã às 12:00
+INSERT INTO RESERVA (DATA_INICIO, DATA_FIM, DATA_CHECKIN, DATA_CHECKOUT, VALOR_RESERVA, FORMA_PAGAMENTO, STATUS_RESERVA, ID_CATEGORIA, ID_QUARTO, ID_HOSPEDE, ID_FUNCIONARIO) VALUES
+(DATEADD('HOUR', 14, CAST(CURRENT_DATE AS TIMESTAMP)), DATEADD('HOUR', 12, CAST(DATEADD('DAY', 1, CURRENT_DATE) AS TIMESTAMP)), CURRENT_TIMESTAMP, NULL, 150.00, 'DEBITO', 'CHECKIN',
+(SELECT ID_CATEGORIA FROM CATEGORIA_QUARTO WHERE NOME_CATEGORIA = 'Standard'),
+(SELECT ID_QUARTO FROM QUARTO WHERE NUM_APARTAMENTO = 101),
+(SELECT ID_HOSPEDE FROM HOSPEDE WHERE NOME_HOSPEDE LIKE 'Pedro%'),
+(SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE NOME_FUNCIONARIO LIKE 'Ana%'));
