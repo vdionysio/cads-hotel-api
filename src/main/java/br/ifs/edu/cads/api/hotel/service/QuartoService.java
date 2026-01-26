@@ -11,6 +11,8 @@ import br.ifs.edu.cads.api.hotel.repository.QuartoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 public class QuartoService {
 
@@ -36,5 +38,9 @@ public class QuartoService {
         Quarto newQuarto = quartoRepository.save(quarto);
 
         return quartoMapper.toDto(newQuarto);
+    }
+
+    public Integer countTotalPorCategoria(Integer categoriaId) {
+        return quartoRepository.countQuartosByCategoriaId(categoriaId);
     }
 }

@@ -12,6 +12,7 @@ import br.ifs.edu.cads.api.hotel.repository.ComodidadeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -43,5 +44,14 @@ public class CategoriaQuartoService {
         CategoriaQuarto newCategoriaQuarto = categoriaQuartoRepository.save(categoriaQuarto);
 
         return categoriaQuartoMapper.toDto(newCategoriaQuarto);
+    }
+
+    public CategoriaQuartoDto findById(Integer categoriaId) {
+
+        CategoriaQuarto categoriaQuarto = categoriaQuartoRepository.findById(categoriaId).orElseThrow(
+                () -> new ResourceNotFoundException("Categoria de ID " + categoriaId + " não encontrada.")
+        );
+
+        return categoriaQuartoMapper.toDto(categoriaQuarto);
     }
 }
