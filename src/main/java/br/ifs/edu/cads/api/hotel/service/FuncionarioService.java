@@ -4,9 +4,11 @@ import br.ifs.edu.cads.api.hotel.dto.FuncionarioDto;
 import br.ifs.edu.cads.api.hotel.dto.FuncionarioFormDto;
 import br.ifs.edu.cads.api.hotel.dto.mapper.FuncionarioMapper;
 import br.ifs.edu.cads.api.hotel.entity.Funcionario;
+import br.ifs.edu.cads.api.hotel.entity.Hospede;
 import br.ifs.edu.cads.api.hotel.entity.Usuario;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.FuncionarioRepository;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,5 +51,13 @@ public class FuncionarioService {
         );
 
         return funcionarioMapper.toDto(funcionario);
+    }
+
+    public Funcionario findFuncionarioById(Long idFuncionario) {
+        Funcionario funcionario = funcionarioRepository.findById(idFuncionario).orElseThrow(
+                () -> new ResourceNotFoundException("Funcionario de ID " + idFuncionario + " não encontrado.")
+        );
+
+        return funcionario;
     }
 }

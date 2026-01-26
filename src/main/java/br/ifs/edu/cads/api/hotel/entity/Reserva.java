@@ -5,6 +5,7 @@ import br.ifs.edu.cads.api.hotel.enums.StatusReserva;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,10 +19,10 @@ public class Reserva {
     private Long id;
 
     @Column(name = "data_inicio", nullable = false)
-    private LocalDateTime dataInicio;
+    private LocalDate dataInicio;
 
     @Column(name = "data_fim", nullable = false)
-    private LocalDateTime dataFim;
+    private LocalDate dataFim;
 
     @Column(name = "data_checkin")
     private LocalDateTime dataCheckIn;
@@ -65,4 +66,118 @@ public class Reserva {
     @JoinColumn(name = "id_funcionario")
     private Funcionario funcionario;
 
+    public Reserva() {
+
+    }
+
+    public Reserva(LocalDate dataInicio, LocalDate dataFim, FormaPagamento formaPagamento, StatusReserva statusReserva) {
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.formaPagamento = formaPagamento;
+        this.statusReserva = statusReserva;
+    }
+
+    public BigDecimal getValorReserva() {
+        return valorReserva;
+    }
+
+    public void setValorReserva(BigDecimal valorReserva) {
+        this.valorReserva = valorReserva;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDate getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(LocalDate dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public LocalDate getDataFim() {
+        return dataFim;
+    }
+
+    public void setDataFim(LocalDate dataFim) {
+        this.dataFim = dataFim;
+    }
+
+    public LocalDateTime getDataCheckIn() {
+        return dataCheckIn;
+    }
+
+    public void setDataCheckIn(LocalDateTime dataCheckIn) {
+        this.dataCheckIn = dataCheckIn;
+    }
+
+    public LocalDateTime getDataCheckOut() {
+        return dataCheckOut;
+    }
+
+    public void setDataCheckOut(LocalDateTime dataCheckOut) {
+        this.dataCheckOut = dataCheckOut;
+    }
+
+    public FormaPagamento getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(FormaPagamento formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    public StatusReserva getStatusReserva() {
+        return statusReserva;
+    }
+
+    public void setStatusReserva(StatusReserva statusReserva) {
+        this.statusReserva = statusReserva;
+    }
+
+    public CategoriaQuarto getCategoriaQuarto() {
+        return categoriaQuarto;
+    }
+
+    public void setCategoriaQuarto(CategoriaQuarto categoriaQuarto) {
+        this.categoriaQuarto = categoriaQuarto;
+    }
+
+    public Quarto getQuarto() {
+        return quarto;
+    }
+
+    public void setQuarto(Quarto quarto) {
+        this.quarto = quarto;
+    }
+
+    public Hospede getHospede() {
+        return hospede;
+    }
+
+    public void setHospede(Hospede hospede) {
+        this.hospede = hospede;
+    }
+
+    public List<Hospede> getConvidados() {
+        return convidados;
+    }
+
+    public void setConvidados(List<Hospede> convidados) {
+        this.convidados = convidados;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
 }

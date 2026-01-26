@@ -5,7 +5,7 @@ import br.ifs.edu.cads.api.hotel.entity.Reserva;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     @Query("""
@@ -15,6 +15,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
         AND (r.dataInicio < :dataFim AND r.dataFim > :dataInicio)
     """)
     Integer contarReservasConflitantes(
-            LocalDateTime dataInicio, LocalDateTime dataFim, Integer categoriaQuartoId
+            LocalDate dataInicio, LocalDate dataFim, Integer categoriaQuartoId
     );
 }

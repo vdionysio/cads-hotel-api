@@ -5,29 +5,26 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 public record ReservaFormDto(
 
         @NotNull
         @Future
-        LocalDateTime dataInicio,
+        LocalDate dataInicio,
 
         @NotNull
         @Future
-        LocalDateTime dataFim,
+        LocalDate dataFim,
 
         @NotNull
         FormaPagamento formaPagamento,
 
         @NotNull
-        Long idCategoriaQuarto,
+        Integer idCategoriaQuarto,
 
         @NotNull
         Long idHospede,
-
-        List<Long> idsConvidados,
 
         @NotNull
         Long idFuncionario

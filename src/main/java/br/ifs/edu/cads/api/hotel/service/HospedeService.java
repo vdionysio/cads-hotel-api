@@ -13,6 +13,7 @@ import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.CidadeRepository;
 import br.ifs.edu.cads.api.hotel.repository.HospedeRepository;
 import br.ifs.edu.cads.api.hotel.repository.UsuarioRepository;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,5 +63,13 @@ public class HospedeService {
 
         Hospede newHospede = hospedeRepository.save(hospede);
         return hospedeMapper.toUsuarioDto(newHospede);
+    }
+
+    public Hospede findById(Long idHospede) {
+        Hospede hospede = hospedeRepository.findById(idHospede).orElseThrow(
+                () -> new ResourceNotFoundException("Hospede de ID " + idHospede + " não encontrado.")
+        );
+
+        return hospede;
     }
 }

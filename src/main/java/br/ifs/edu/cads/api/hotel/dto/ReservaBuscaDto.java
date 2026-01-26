@@ -2,14 +2,14 @@ package br.ifs.edu.cads.api.hotel.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record ReservaBuscaDto (
         @NotNull
-        LocalDateTime dataInicio,
+        LocalDate dataInicio,
 
         @NotNull
-        LocalDateTime dataFim,
+        LocalDate dataFim,
 
         @NotNull
         Integer categoriaId

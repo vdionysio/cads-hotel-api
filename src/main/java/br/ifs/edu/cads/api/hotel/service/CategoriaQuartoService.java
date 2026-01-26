@@ -46,12 +46,12 @@ public class CategoriaQuartoService {
         return categoriaQuartoMapper.toDto(newCategoriaQuarto);
     }
 
-    public CategoriaQuartoDto findById(Integer categoriaId) {
+    public CategoriaQuarto findById(Integer categoriaId) {
 
         CategoriaQuarto categoriaQuarto = categoriaQuartoRepository.findById(categoriaId).orElseThrow(
                 () -> new ResourceNotFoundException("Categoria de ID " + categoriaId + " não encontrada.")
         );
 
-        return categoriaQuartoMapper.toDto(categoriaQuarto);
+        return categoriaQuarto;
     }
 }

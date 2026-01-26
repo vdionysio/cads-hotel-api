@@ -1,13 +1,13 @@
 package br.ifs.edu.cads.api.hotel.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public record DisponibilidadeReservaDto(
         Integer categoriaId,
         Boolean estaDisponivel,
         BigDecimal valorReserva,
-        LocalDateTime dataCheckIn,
-        LocalDateTime dataCheckOut
+        LocalDate dataInicio,
+        LocalDate dataFim
 ) {
 }
