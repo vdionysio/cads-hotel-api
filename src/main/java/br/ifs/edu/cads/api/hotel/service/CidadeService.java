@@ -7,7 +7,6 @@ import br.ifs.edu.cads.api.hotel.entity.Cidade;
 import br.ifs.edu.cads.api.hotel.entity.Estado;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.CidadeRepository;
-import br.ifs.edu.cads.api.hotel.repository.EstadoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -17,14 +16,14 @@ import java.util.List;
 public class CidadeService {
 
     private final CidadeRepository cidadeRepository;
-    private final EstadoRepository estadoRepository;
     private final CidadeMapper cidadeMapper;
+    private final EstadoService estadoService;
 
 
-    public CidadeService(CidadeRepository cidadeRepository, EstadoRepository estadoRepository, CidadeMapper cidadeMapper) {
+    public CidadeService(CidadeRepository cidadeRepository, CidadeMapper cidadeMapper, EstadoService estadoService) {
         this.cidadeRepository = cidadeRepository;
-        this.estadoRepository = estadoRepository;
         this.cidadeMapper = cidadeMapper;
+        this.estadoService = estadoService;
     }
 
     public List<CidadeDto> findCidadesByUf(String uf) {
@@ -37,18 +36,15 @@ public class CidadeService {
     }
 
     public CidadeDto createCidade(CidadeFormDto cidadeFormDto) {
-        Estado estado = estadoRepository.findByUf(cidadeFormDto.uf()).orElseThrow(
-                () -> new ResourceNotFoundException("UF " + cidadeFormDto.uf() + " não encontrada.")
-        );
-        Cidade newCidade = cidadeRepository.save(cidadeMapper.formToEntity(cidadeFormDto, estado));
+        Estado estado = estadoService.findByUf(cidadeFormDto.uf());
+        Cidade newCidade = cidadeRepository.save(cidadeMapper.formToEntity(cidadeFormDto));
+        newCidade.setEstado(estado);
 
         return cidadeMapper.toDto(newCidade);
     }
 
     public void updateCidade(CidadeFormDto cidadeFormDto, Long id) {
-        Estado estado = estadoRepository.findByUf(cidadeFormDto.uf()).orElseThrow(
-                () -> new ResourceNotFoundException("UF " + cidadeFormDto.uf() + " não encontrada")
-        );
+        Estado estado = estadoService.findByUf(cidadeFormDto.uf());
         Cidade cidade = cidadeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Cidade de id " + id + " não encontrada")
         );

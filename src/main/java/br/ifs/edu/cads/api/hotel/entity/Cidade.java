@@ -1,11 +1,12 @@
 package br.ifs.edu.cads.api.hotel.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(
-    name = "cidade",
-    uniqueConstraints = { @UniqueConstraint(name = "UniqueUfAndNome", columnNames = { "nome_cidade", "uf" }) }
+        name = "cidade",
+        uniqueConstraints = {@UniqueConstraint(name = "UniqueUfAndNome", columnNames = {"nome_cidade", "uf"})}
 )
 public class Cidade {
     @Id
@@ -23,9 +24,8 @@ public class Cidade {
     public Cidade() {
     }
 
-    public Cidade(String nome, Estado estado) {
+    public Cidade(String nome) {
         this.nome = nome;
-        this.estado = estado;
     }
 
     public Long getId() {

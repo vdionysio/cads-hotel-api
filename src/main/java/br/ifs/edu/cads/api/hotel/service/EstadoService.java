@@ -55,4 +55,10 @@ public class EstadoService {
 
         return estadoMapper.toDto(estado);
     }
+
+    public Estado findByUf(String uf) {
+        return estadoRepository.findByUf(uf).orElseThrow(
+                () -> new ResourceNotFoundException("UF " + uf + " não encontrada.")
+        );
+    }
 }
