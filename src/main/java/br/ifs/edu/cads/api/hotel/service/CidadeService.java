@@ -27,20 +27,18 @@ public class CidadeService {
     }
 
     public List<CidadeDto> findCidadesByUf(String uf) {
-        List<CidadeDto> cidades = cidadeRepository.findByEstadoUf(uf).stream()
+        return cidadeRepository.findByEstadoUf(uf).stream()
                 .map(cidadeMapper::toDto)
                 .sorted(Comparator.comparing(CidadeDto::uf))
                 .toList();
-
-        return cidades;
     }
 
     public CidadeDto createCidade(CidadeFormDto cidadeFormDto) {
         Estado estado = estadoService.findByUf(cidadeFormDto.uf());
-        Cidade newCidade = cidadeRepository.save(cidadeMapper.formToEntity(cidadeFormDto));
-        newCidade.setEstado(estado);
+        Cidade cidade = cidadeRepository.save(cidadeMapper.formToEntity(cidadeFormDto));
+        cidade.setEstado(estado);
 
-        return cidadeMapper.toDto(newCidade);
+        return cidadeMapper.toDto(cidade);
     }
 
     public void updateCidade(CidadeFormDto cidadeFormDto, Long id) {
@@ -49,8 +47,7 @@ public class CidadeService {
                 () -> new ResourceNotFoundException("Cidade de id " + id + " não encontrada")
         );
 
-        cidade.setNome(cidadeFormDto.nome());
-        cidade.setEstado(estado);
+        cidadeMapper.updateEntity(cidadeFormDto, cidade, estado);
 
         cidadeRepository.save(cidade);
     }

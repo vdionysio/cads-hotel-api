@@ -30,6 +30,7 @@ public class EstadoController {
     public ResponseEntity<EstadoDto> createEstado(@RequestBody @Valid EstadoFormDto estadoFormDto) {
         EstadoDto estadoDto = estadoService.createEstado(estadoFormDto);
         URI location = URI.create("/api/estados/" + estadoDto.id());
+
         return ResponseEntity.created(location).body(estadoDto);
     }
 
@@ -42,7 +43,6 @@ public class EstadoController {
     @GetMapping("/{id}")
     public ResponseEntity<EstadoDto> getEstadoById(@PathVariable Long id) {
         EstadoDto estadoDto = estadoService.findById(id);
-
         return ResponseEntity.ok(estadoDto);
     }
 }

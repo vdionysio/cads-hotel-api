@@ -30,6 +30,7 @@ public class CidadeController {
     public ResponseEntity<CidadeDto> createCidade(@RequestBody @Valid CidadeFormDto cidadeFormDto) {
         CidadeDto cidadeDto = cidadeService.createCidade(cidadeFormDto);
         URI location = URI.create("/api/cidades/" + cidadeDto.id());
+
         return ResponseEntity.created(location).body(cidadeDto);
     }
 
@@ -42,7 +43,6 @@ public class CidadeController {
     @GetMapping("/{id}")
     public ResponseEntity<CidadeDto> getCidadeById(@PathVariable Long id) {
         CidadeDto cidadeDto = cidadeService.findById(id);
-
         return ResponseEntity.ok(cidadeDto);
     }
 }

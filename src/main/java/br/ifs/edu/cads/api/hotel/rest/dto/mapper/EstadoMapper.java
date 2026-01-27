@@ -11,8 +11,8 @@ public class EstadoMapper {
         return new EstadoDto(estado.getId(), estado.getNome(), estado.getUf());
     }
 
-    public Estado toEntity(EstadoFormDto estadoFormDto) {
-        return new Estado(estadoFormDto.nome(), estadoFormDto.uf().toUpperCase());
+    public Estado toEntity(EstadoFormDto dto) {
+        return new Estado(dto.nome(), dto.uf().toUpperCase());
     }
 
     public void updateEntity(EstadoFormDto dto, Estado estado) {
