@@ -1,9 +1,6 @@
 package br.ifs.edu.cads.api.hotel.controller;
 
-import br.ifs.edu.cads.api.hotel.dto.DisponibilidadeReservaDto;
-import br.ifs.edu.cads.api.hotel.dto.ReservaBuscaDto;
-import br.ifs.edu.cads.api.hotel.dto.ReservaDto;
-import br.ifs.edu.cads.api.hotel.dto.ReservaFormDto;
+import br.ifs.edu.cads.api.hotel.dto.*;
 import br.ifs.edu.cads.api.hotel.service.ReservaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +31,13 @@ public class ReservaController {
         DisponibilidadeReservaDto disponibilidadeReservaDto = reservaService.checarDisponibilidade(reservaBuscaDto);
 
         return ResponseEntity.ok(disponibilidadeReservaDto);
+    }
+
+    @PostMapping("/cancelamento")
+    public ResponseEntity<CancelamentoDto> cancelarReserva(@RequestBody @Valid CancelamentoFormDto cancelamentoFormDto) {
+        // TODO: adicionar validação de usuário. O próprio hóspede ou adm.
+        CancelamentoDto cancelamentoDto = reservaService.cancelarReserva(cancelamentoFormDto);
+
+        return ResponseEntity.ok(cancelamentoDto);
     }
 }
