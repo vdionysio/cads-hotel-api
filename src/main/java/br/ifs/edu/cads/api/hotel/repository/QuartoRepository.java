@@ -1,6 +1,6 @@
 package br.ifs.edu.cads.api.hotel.repository;
 
-import br.ifs.edu.cads.api.hotel.dto.QuartoReservaDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.QuartoReservaDto;
 import br.ifs.edu.cads.api.hotel.entity.Quarto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface QuartoRepository extends JpaRepository<Quarto, Integer> {
     @Query("""
-        SELECT new br.ifs.edu.cads.api.hotel.dto.QuartoReservaDto(q, r)
+        SELECT new br.ifs.edu.cads.api.hotel.rest.dto.QuartoReservaDto(q, r)
         FROM Quarto q
         LEFT JOIN Reserva r ON r.quarto.id = q.id
             AND (r.statusReserva = 'CHECKIN' OR r.statusReserva = 'CHECKOUT')

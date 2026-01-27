@@ -1,10 +1,10 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.dto.HospedeDto;
-import br.ifs.edu.cads.api.hotel.dto.HospedeFormDto;
-import br.ifs.edu.cads.api.hotel.dto.HospedeUsuarioDto;
-import br.ifs.edu.cads.api.hotel.dto.HospedeUsuarioFormDto;
-import br.ifs.edu.cads.api.hotel.dto.mapper.HospedeMapper;
+import br.ifs.edu.cads.api.hotel.rest.dto.HospedeDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.HospedeFormDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.HospedeUsuarioDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.HospedeUsuarioFormDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.HospedeMapper;
 import br.ifs.edu.cads.api.hotel.entity.Cidade;
 import br.ifs.edu.cads.api.hotel.entity.Hospede;
 import br.ifs.edu.cads.api.hotel.entity.Usuario;
@@ -13,7 +13,6 @@ import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.CidadeRepository;
 import br.ifs.edu.cads.api.hotel.repository.HospedeRepository;
 import br.ifs.edu.cads.api.hotel.repository.UsuarioRepository;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

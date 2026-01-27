@@ -1,8 +1,8 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.dto.*;
-import br.ifs.edu.cads.api.hotel.dto.mapper.CancelamentoMapper;
-import br.ifs.edu.cads.api.hotel.dto.mapper.ReservaMapper;
+import br.ifs.edu.cads.api.hotel.rest.dto.*;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.CancelamentoMapper;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.ReservaMapper;
 import br.ifs.edu.cads.api.hotel.entity.*;
 import br.ifs.edu.cads.api.hotel.enums.StatusReserva;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;

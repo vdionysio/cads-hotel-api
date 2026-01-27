@@ -1,8 +1,8 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.dto.ComodidadeDto;
-import br.ifs.edu.cads.api.hotel.dto.ComodidadeFormDto;
-import br.ifs.edu.cads.api.hotel.dto.mapper.ComodidadeMapper;
+import br.ifs.edu.cads.api.hotel.rest.dto.ComodidadeDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.ComodidadeFormDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.ComodidadeMapper;
 import br.ifs.edu.cads.api.hotel.entity.Comodidade;
 import br.ifs.edu.cads.api.hotel.repository.ComodidadeRepository;
 import org.springframework.stereotype.Service;

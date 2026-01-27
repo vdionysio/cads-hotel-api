@@ -1,8 +1,8 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.dto.CidadeDto;
-import br.ifs.edu.cads.api.hotel.dto.CidadeFormDto;
-import br.ifs.edu.cads.api.hotel.dto.mapper.CidadeMapper;
+import br.ifs.edu.cads.api.hotel.rest.dto.CidadeDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.CidadeFormDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.CidadeMapper;
 import br.ifs.edu.cads.api.hotel.entity.Cidade;
 import br.ifs.edu.cads.api.hotel.entity.Estado;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;

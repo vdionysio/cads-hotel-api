@@ -1,11 +1,12 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.dto.EstadoDto;
-import br.ifs.edu.cads.api.hotel.dto.EstadoFormDto;
-import br.ifs.edu.cads.api.hotel.dto.mapper.EstadoMapper;
+import br.ifs.edu.cads.api.hotel.rest.dto.EstadoDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.EstadoFormDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.EstadoMapper;
 import br.ifs.edu.cads.api.hotel.entity.Estado;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.EstadoRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -23,18 +24,15 @@ public class EstadoService {
     }
 
     public List<EstadoDto> findAllEstados() {
-        List<EstadoDto> estados = estadoRepository.findAll().stream()
+        return estadoRepository.findAll(Sort.by("uf")).stream()
                 .map(estadoMapper::toDto)
-                .sorted(Comparator.comparing(EstadoDto::uf))
                 .toList();
-
-        return estados;
     }
 
     public EstadoDto createEstado(EstadoFormDto estadoFormDto) {
-        Estado newEstado = estadoRepository.save(estadoMapper.formToEntity(estadoFormDto));
+        Estado estado = estadoRepository.save(estadoMapper.toEntity(estadoFormDto));
 
-        return estadoMapper.toDto(newEstado);
+        return estadoMapper.toDto(estado);
     }
 
     public void updateEstado(EstadoFormDto estadoFormDto, long id) {
@@ -42,8 +40,7 @@ public class EstadoService {
                 () -> new ResourceNotFoundException("Estado de id " + id + " não encontrado")
         );
 
-        estado.setNome(estadoFormDto.nome());
-        estado.setUf(estadoFormDto.uf());
+        estadoMapper.updateEntity(estadoFormDto, estado);
 
         estadoRepository.save(estado);
     }

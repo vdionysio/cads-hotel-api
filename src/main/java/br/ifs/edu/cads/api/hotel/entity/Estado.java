@@ -3,20 +3,23 @@ package br.ifs.edu.cads.api.hotel.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "estado")
+@Table(name = "estado", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_estado_nome", columnNames = "nome_estado"),
+        @UniqueConstraint(name = "uk_estaod_uf", columnNames = "uf")
+})
 public class Estado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_estado")
     private Long id;
 
-    @Column(name = "uf", nullable = false, length = 2, unique = true)
+    @Column(name = "uf", nullable = false, length = 2)
     private String uf;
 
-    @Column(name = "nome_estado", nullable = false, unique = true)
+    @Column(name = "nome_estado", nullable = false)
     private String nome;
 
-    public Estado(){
+    public Estado() {
 
     }
 

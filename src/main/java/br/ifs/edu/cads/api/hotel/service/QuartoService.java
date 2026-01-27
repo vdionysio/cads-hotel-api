@@ -1,8 +1,8 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.dto.QuartoDto;
-import br.ifs.edu.cads.api.hotel.dto.QuartoFormDto;
-import br.ifs.edu.cads.api.hotel.dto.mapper.QuartoMapper;
+import br.ifs.edu.cads.api.hotel.rest.dto.QuartoDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.QuartoFormDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.QuartoMapper;
 import br.ifs.edu.cads.api.hotel.entity.CategoriaQuarto;
 import br.ifs.edu.cads.api.hotel.entity.Quarto;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
@@ -10,8 +10,6 @@ import br.ifs.edu.cads.api.hotel.repository.CategoriaQuartoRepository;
 import br.ifs.edu.cads.api.hotel.repository.QuartoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
 
 @Service
 public class QuartoService {

@@ -1,11 +1,10 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.dto.CancelamentoComMultaDto;
-import br.ifs.edu.cads.api.hotel.dto.QuartoReservaDto;
-import br.ifs.edu.cads.api.hotel.dto.QuartoOcupacaoDto;
-import br.ifs.edu.cads.api.hotel.dto.ReservaSimplesDto;
-import br.ifs.edu.cads.api.hotel.dto.mapper.ReservaMapper;
-import br.ifs.edu.cads.api.hotel.entity.Cancelamento;
+import br.ifs.edu.cads.api.hotel.rest.dto.CancelamentoComMultaDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.QuartoReservaDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.QuartoOcupacaoDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.ReservaSimplesDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.ReservaMapper;
 import br.ifs.edu.cads.api.hotel.entity.Quarto;
 import br.ifs.edu.cads.api.hotel.entity.Reserva;
 import br.ifs.edu.cads.api.hotel.enums.StatusRelatorioOcupacao;

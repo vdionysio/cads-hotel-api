@@ -1,7 +1,7 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.dto.UsuarioDto;
-import br.ifs.edu.cads.api.hotel.dto.mapper.UsuarioMapper;
+import br.ifs.edu.cads.api.hotel.rest.dto.UsuarioDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.UsuarioMapper;
 import br.ifs.edu.cads.api.hotel.entity.Usuario;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.UsuarioRepository;
