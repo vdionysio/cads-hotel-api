@@ -2,14 +2,14 @@ package br.ifs.edu.cads.api.hotel.dto;
 
 import br.ifs.edu.cads.api.hotel.enums.StatusReserva;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record ReservaSimplesDto(
         Long idReserva,
         String nomeHospede,
         String categoriaQuarto,
-        LocalDate dataInicio,
-        LocalDate dataFim,
+        LocalDateTime dataInicio,
+        LocalDateTime dataFim,
         StatusReserva statusReserva
 ) {
 }

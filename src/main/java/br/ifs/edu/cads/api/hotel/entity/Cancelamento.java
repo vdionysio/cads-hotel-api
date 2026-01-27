@@ -2,6 +2,7 @@ package br.ifs.edu.cads.api.hotel.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 public class Cancelamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_cancelamento")
     private Long id;
 
     @Column(name = "motivo", nullable = false)
@@ -16,6 +18,9 @@ public class Cancelamento {
 
     @Column(name = "data_cancelamento", nullable = false)
     private LocalDateTime dataCancelamento;
+
+    @Column(name = "valor_multa", nullable = false)
+    private BigDecimal valorMulta;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "id_reserva")
@@ -47,6 +52,14 @@ public class Cancelamento {
 
     public void setDataCancelamento(LocalDateTime dataCancelamento) {
         this.dataCancelamento = dataCancelamento;
+    }
+
+    public BigDecimal getValorMulta() {
+        return valorMulta;
+    }
+
+    public void setValorMulta(BigDecimal valorMulta) {
+        this.valorMulta = valorMulta;
     }
 
     public Reserva getReserva() {

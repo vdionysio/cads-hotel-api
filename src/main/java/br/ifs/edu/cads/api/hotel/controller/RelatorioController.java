@@ -1,10 +1,10 @@
 package br.ifs.edu.cads.api.hotel.controller;
 
+import br.ifs.edu.cads.api.hotel.dto.CancelamentoComMultaDto;
 import br.ifs.edu.cads.api.hotel.dto.QuartoOcupacaoDto;
 import br.ifs.edu.cads.api.hotel.dto.ReservaSimplesDto;
 import br.ifs.edu.cads.api.hotel.dto.UsuarioDto;
 import br.ifs.edu.cads.api.hotel.enums.PapelUsuario;
-import br.ifs.edu.cads.api.hotel.enums.StatusQuarto;
 import br.ifs.edu.cads.api.hotel.enums.StatusRelatorioOcupacao;
 import br.ifs.edu.cads.api.hotel.service.RelatorioService;
 import br.ifs.edu.cads.api.hotel.service.UsuarioService;
@@ -69,4 +69,21 @@ public class RelatorioController {
         return ResponseEntity.ok(relatorio);
     }
 
+    @GetMapping("/cancelamentos-multa")
+    public ResponseEntity<Page<CancelamentoComMultaDto>> obterRelatorioMultas(
+            @RequestParam("data-inicial") LocalDate dataInicial,
+            @RequestParam("data-final") LocalDate dataFinal,
+            @PageableDefault(sort = "valorMulta", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestHeader("usuario-email") String email,
+            @RequestHeader("usuario-senha") String senha
+    ) {
+        UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
+
+        if (!(usuarioDto.papel() == PapelUsuario.GERENTE)) {
+            throw new RuntimeException("Operação não permitida para o usuário.");
+        }
+
+        Page<CancelamentoComMultaDto> relatorio = relatorioService.gerarRelatorioMultas(dataInicial, dataFinal, pageable);
+        return ResponseEntity.ok(relatorio);
+    }
 }

@@ -8,11 +8,11 @@ import br.ifs.edu.cads.api.hotel.enums.StatusReserva;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.CancelamentoRepository;
 import br.ifs.edu.cads.api.hotel.repository.ReservaRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -99,14 +99,27 @@ public class ReservaService {
             throw new RuntimeException("Não é possível cancelar uma reserva que não está no status Reservado.");
         }
 
-        reserva.setStatusReserva(StatusReserva.RESERVADO);
+        reserva.setStatusReserva(StatusReserva.CANCELADO);
         Cancelamento cancelamento = cancelamentoMapper.formToEntity(cancelamentoFormDto);
         cancelamento.setReserva(reserva);
         cancelamento.setDataCancelamento(LocalDateTime.now());
+        cancelamento.setValorMulta(calcularMulta(reserva, LocalDateTime.now()));
 
         reservaRepository.save(reserva);
         cancelamentoRepository.save(cancelamento);
 
         return cancelamentoMapper.toDto(cancelamento);
+    }
+
+    private BigDecimal calcularMulta(Reserva reserva, LocalDateTime dataCancelamento) {
+        long horasAteCheckin = Duration.between(dataCancelamento, reserva.getDataInicio()).toHours();
+
+        if (horasAteCheckin < 24) {
+            return reserva.getValorReserva();
+        } else if (horasAteCheckin < 72) {
+            return reserva.getValorReserva().multiply(new BigDecimal("0.5"));
+        } else {
+            return BigDecimal.ZERO;
+        }
     }
 }

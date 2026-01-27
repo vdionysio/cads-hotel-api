@@ -6,14 +6,13 @@ import br.ifs.edu.cads.api.hotel.enums.StatusReserva;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Component
 public class ReservaMapper {
     public Reserva formToEntity(ReservaFormDto reservaFormDto) {
         return new Reserva(
-                reservaFormDto.dataInicio(),
-                reservaFormDto.dataFim(),
+                reservaFormDto.dataInicio().atTime(14,0),
+                reservaFormDto.dataFim().atTime(12,0),
                 reservaFormDto.formaPagamento(),
                 StatusReserva.RESERVADO
         );

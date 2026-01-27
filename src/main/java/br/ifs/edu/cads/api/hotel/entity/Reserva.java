@@ -19,10 +19,10 @@ public class Reserva {
     private Long id;
 
     @Column(name = "data_inicio", nullable = false)
-    private LocalDate dataInicio;
+    private LocalDateTime dataInicio;
 
     @Column(name = "data_fim", nullable = false)
-    private LocalDate dataFim;
+    private LocalDateTime dataFim;
 
     @Column(name = "data_checkin")
     private LocalDateTime dataCheckIn;
@@ -70,7 +70,7 @@ public class Reserva {
 
     }
 
-    public Reserva(LocalDate dataInicio, LocalDate dataFim, FormaPagamento formaPagamento, StatusReserva statusReserva) {
+    public Reserva(LocalDateTime dataInicio, LocalDateTime dataFim, FormaPagamento formaPagamento, StatusReserva statusReserva) {
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
         this.formaPagamento = formaPagamento;
@@ -93,19 +93,19 @@ public class Reserva {
         this.id = id;
     }
 
-    public LocalDate getDataInicio() {
+    public LocalDateTime getDataInicio() {
         return dataInicio;
     }
 
-    public void setDataInicio(LocalDate dataInicio) {
+    public void setDataInicio(LocalDateTime dataInicio) {
         this.dataInicio = dataInicio;
     }
 
-    public LocalDate getDataFim() {
+    public LocalDateTime getDataFim() {
         return dataFim;
     }
 
-    public void setDataFim(LocalDate dataFim) {
+    public void setDataFim(LocalDateTime dataFim) {
         this.dataFim = dataFim;
     }
 

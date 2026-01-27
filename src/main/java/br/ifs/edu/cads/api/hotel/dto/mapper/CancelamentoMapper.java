@@ -18,6 +18,7 @@ public class CancelamentoMapper {
                 cancelamento.getId(),
                 cancelamento.getMotivo(),
                 cancelamento.getDataCancelamento(),
+                cancelamento.getValorMulta(),
                 cancelamento.getReserva().getId()
         );
     }
