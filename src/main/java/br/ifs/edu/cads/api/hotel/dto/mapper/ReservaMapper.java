@@ -1,9 +1,6 @@
 package br.ifs.edu.cads.api.hotel.dto.mapper;
 
-import br.ifs.edu.cads.api.hotel.dto.DisponibilidadeReservaDto;
-import br.ifs.edu.cads.api.hotel.dto.ReservaBuscaDto;
-import br.ifs.edu.cads.api.hotel.dto.ReservaDto;
-import br.ifs.edu.cads.api.hotel.dto.ReservaFormDto;
+import br.ifs.edu.cads.api.hotel.dto.*;
 import br.ifs.edu.cads.api.hotel.entity.Reserva;
 import br.ifs.edu.cads.api.hotel.enums.StatusReserva;
 import org.springframework.stereotype.Component;
@@ -52,6 +49,17 @@ public class ReservaMapper {
                 reserva.getCategoriaQuarto().getNome(),
                 reserva.getHospede().getId(),
                 reserva.getHospede().getNome()
+        );
+    }
+
+    public ReservaSimplesDto toDtoSimples(Reserva reserva) {
+        return new ReservaSimplesDto(
+                reserva.getId(),
+                reserva.getHospede().getNome(),
+                reserva.getCategoriaQuarto().getNome(),
+                reserva.getDataInicio(),
+                reserva.getDataFim(),
+                reserva.getStatusReserva()
         );
     }
 }
