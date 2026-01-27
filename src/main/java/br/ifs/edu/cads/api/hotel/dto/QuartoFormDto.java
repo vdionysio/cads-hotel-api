@@ -8,7 +8,7 @@ public record QuartoFormDto(
 
         @NotNull
         @Min(1)
-        Integer numApartamento,
+        Integer numQuarto,
 
         @NotNull
         @Min(1)

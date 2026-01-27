@@ -21,7 +21,7 @@ public class Quarto {
     private Integer id;
 
     @Column(name = "num_apartamento", nullable = false)
-    private Integer numApartamento;
+    private Integer numQuarto;
 
     @Column(name = "num_bloco", nullable = false)
     private Integer numBloco;
@@ -40,8 +40,8 @@ public class Quarto {
     public Quarto() {
     }
 
-    public Quarto(Integer numApartamento, Integer numBloco, Integer numAndar, StatusQuarto statusQuarto) {
-        this.numApartamento = numApartamento;
+    public Quarto(Integer numQuarto, Integer numBloco, Integer numAndar, StatusQuarto statusQuarto) {
+        this.numQuarto = numQuarto;
         this.numBloco = numBloco;
         this.numAndar = numAndar;
         this.statusQuarto = statusQuarto;
@@ -51,8 +51,8 @@ public class Quarto {
         return id;
     }
 
-    public Integer getNumApartamento() {
-        return numApartamento;
+    public Integer getNumQuarto() {
+        return numQuarto;
     }
 
     public Integer getNumBloco() {

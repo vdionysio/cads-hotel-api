@@ -12,7 +12,7 @@ public class QuartoMapper {
     public QuartoDto toDto(Quarto quarto) {
         return new QuartoDto(
                 quarto.getId(),
-                quarto.getNumApartamento(),
+                quarto.getNumQuarto(),
                 quarto.getNumBloco(),
                 quarto.getNumAndar(),
                 quarto.getCategoria().getId(),
@@ -22,7 +22,7 @@ public class QuartoMapper {
 
     public Quarto formToEntity(QuartoFormDto quartoFormDto) {
         return new Quarto(
-                quartoFormDto.numApartamento(),
+                quartoFormDto.numQuarto(),
                 quartoFormDto.numBloco(),
                 quartoFormDto.numAndar(),
                 StatusQuarto.DISPONIVEL
