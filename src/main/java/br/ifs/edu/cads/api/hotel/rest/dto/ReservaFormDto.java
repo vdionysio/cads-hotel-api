@@ -30,7 +30,6 @@ public record ReservaFormDto(
         Long idFuncionario
 ) {
 
-    // garantir que dataFim é maior que dataInicio
     @AssertTrue
     public boolean isDataFimValida() {
         if (dataInicio == null || dataFim == null) return true; // nao sobrepõe o notnull

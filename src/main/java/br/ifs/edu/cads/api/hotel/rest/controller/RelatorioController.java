@@ -52,11 +52,7 @@ public class RelatorioController {
     public ResponseEntity<Page<QuartoOcupacaoDto>> obterRelatorioOcupacao(
             @RequestParam(required = false) Integer idCategoriaQuarto,
             @RequestParam StatusRelatorioOcupacao status,
-            @PageableDefault(
-                    size = 10,
-                    sort = {"numBloco", "numAndar"},
-                    direction = Sort.Direction.ASC
-            ) Pageable pageable,
+            @PageableDefault(sort = {"numBloco", "numAndar"}, direction = Sort.Direction.ASC) Pageable pageable,
             @RequestHeader("usuario-email") String email,
             @RequestHeader("usuario-senha") String senha
     ) {
