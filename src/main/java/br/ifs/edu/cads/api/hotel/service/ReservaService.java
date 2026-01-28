@@ -1,5 +1,6 @@
 package br.ifs.edu.cads.api.hotel.service;
 
+import br.ifs.edu.cads.api.hotel.exception.BusinessRuleException;
 import br.ifs.edu.cads.api.hotel.rest.dto.*;
 import br.ifs.edu.cads.api.hotel.rest.dto.mapper.CancelamentoMapper;
 import br.ifs.edu.cads.api.hotel.rest.dto.mapper.ReservaMapper;
@@ -48,8 +49,7 @@ public class ReservaService {
         );
 
         if (!disponibilidadeReservaDto.estaDisponivel()) {
-            // TODO: Criar exception customizada
-            throw new RuntimeException("Quarto não disponível para o período selecionado.");
+            throw new BusinessRuleException("Quarto não disponível para o período selecionado.");
         }
 
         CategoriaQuarto categoriaQuarto = categoriaQuartoService.findById(reservaFormDto.idCategoriaQuarto());
@@ -95,8 +95,7 @@ public class ReservaService {
         );
 
         if (reserva.getStatusReserva() != StatusReserva.RESERVADO) {
-            // TODO: criar exception especíica para este caso
-            throw new RuntimeException("Não é possível cancelar uma reserva que não está no status Reservado.");
+            throw new BusinessRuleException("Não é possível cancelar uma reserva que não está no status Reservado.");
         }
 
         reserva.setStatusReserva(StatusReserva.CANCELADO);

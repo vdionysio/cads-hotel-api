@@ -60,9 +60,33 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
     }
 
-    private String determinaMensagemPorConstraint(String msgBruto) {
-        if (msgBruto == null) return "Erro de integridade de dados.";
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<StandardError> handleUnauthorized(UnauthorizedException e, HttpServletRequest request) {
+        StandardError err = new StandardError(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Acesso negado",
+                e.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err);
+    }
 
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<StandardError> handleBusinessRule(BusinessRuleException e, HttpServletRequest request) {
+        StandardError err = new StandardError(
+                Instant.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Regra de negócio",
+                e.getMessage(),
+                request.getRequestURI(),
+                null
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
+    }
+
+    private String determinaMensagemPorConstraint(String msgBruto) {
         String msg = msgBruto.toLowerCase();
 
         // define mensagem a partir da constraint violada
@@ -70,8 +94,10 @@ public class ControllerExceptionHandler {
             return "Já existe um estado cadastrado com este Nome.";
         } else if (msg.contains("uk_estado_uf")) {
             return "Já existe um estado cadastrado com esta UF.";
+        } else if (msg.contains("uk_cidade_nome_and_uf")) {
+            return "Já existe uma cidade cadastrada com este Nome e UF.";
         }
 
-        return "A operação viola uma regra de integridade do banco de dados.";
+        return "Regra de integridade do banco de dados violada.";
     }
 }

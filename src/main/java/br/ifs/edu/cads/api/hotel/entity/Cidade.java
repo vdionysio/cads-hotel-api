@@ -3,10 +3,9 @@ package br.ifs.edu.cads.api.hotel.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-        name = "cidade",
-        uniqueConstraints = {@UniqueConstraint(name = "UniqueUfAndNome", columnNames = {"nome_cidade", "uf"})}
-)
+@Table( name = "cidade", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_cidade_nome_and_uf", columnNames = {"nome_cidade", "uf"})
+})
 public class Cidade {
     @Id
     @Column(name = "id_cidade")

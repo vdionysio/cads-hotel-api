@@ -1,5 +1,6 @@
 package br.ifs.edu.cads.api.hotel.rest.controller;
 
+import br.ifs.edu.cads.api.hotel.exception.UnauthorizedException;
 import br.ifs.edu.cads.api.hotel.rest.dto.CancelamentoComMultaDto;
 import br.ifs.edu.cads.api.hotel.rest.dto.QuartoOcupacaoDto;
 import br.ifs.edu.cads.api.hotel.rest.dto.ReservaSimplesDto;
@@ -39,7 +40,7 @@ public class RelatorioController {
         UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
 
         if (!(usuarioDto.papel() == PapelUsuario.GERENTE || usuarioDto.papel() == PapelUsuario.RECEPCIONISTA)) {
-            throw new RuntimeException("Operação não permitida para o usuário.");
+            throw new UnauthorizedException();
         }
 
         List<ReservaSimplesDto> relatorio = relatorioService.gerarRelatorioReservasPorPeriodo(dataInicial, dataFinal);
@@ -62,7 +63,7 @@ public class RelatorioController {
         UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
 
         if (!(usuarioDto.papel() == PapelUsuario.GERENTE)) {
-            throw new RuntimeException("Operação não permitida para o usuário.");
+            throw new UnauthorizedException();
         }
 
         Page<QuartoOcupacaoDto> relatorio = relatorioService.gerarRelatorioOcupacao(idCategoriaQuarto, status, pageable);
@@ -80,7 +81,7 @@ public class RelatorioController {
         UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
 
         if (!(usuarioDto.papel() == PapelUsuario.GERENTE)) {
-            throw new RuntimeException("Operação não permitida para o usuário.");
+            throw new UnauthorizedException();
         }
 
         Page<CancelamentoComMultaDto> relatorio = relatorioService.gerarRelatorioMultas(dataInicial, dataFinal, pageable);
