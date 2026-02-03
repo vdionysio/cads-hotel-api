@@ -1,5 +1,6 @@
 package br.ifs.edu.cads.api.hotel.service;
 
+import br.ifs.edu.cads.api.hotel.enums.FormaPagamento;
 import br.ifs.edu.cads.api.hotel.repository.HospedeRepository;
 import br.ifs.edu.cads.api.hotel.rest.dto.*;
 import br.ifs.edu.cads.api.hotel.rest.dto.mapper.HospedeMapper;
@@ -88,5 +89,9 @@ public class RelatorioService {
 
     public List<HospedeUsuarioRelatorioDto> listarHospedesAtivos() {
         return hospedeRepository.findByUsuarioAtivoTrue().stream().map(hospedeMapper::toRelatorioDto).toList();
+    }
+
+    public Page<ReservaPagamentoRelatorioDto> gerarRelatorioPagamento(FormaPagamento forma, LocalDateTime dataInicio,LocalDateTime dataFim, Pageable pageable) {
+        return reservaRepository.relatorioPorFormaPagamento(forma, dataInicio, dataFim, pageable);
     }
 }

@@ -1,5 +1,6 @@
 package br.ifs.edu.cads.api.hotel.rest.controller;
 
+import br.ifs.edu.cads.api.hotel.enums.FormaPagamento;
 import br.ifs.edu.cads.api.hotel.exception.UnauthorizedException;
 import br.ifs.edu.cads.api.hotel.rest.dto.*;
 import br.ifs.edu.cads.api.hotel.enums.PapelUsuario;
@@ -94,5 +95,23 @@ public class RelatorioController {
         }
 
         return ResponseEntity.ok(relatorioService.listarHospedesAtivos());
+    }
+
+    @GetMapping("/pagamentos")
+    public ResponseEntity<Page<ReservaPagamentoRelatorioDto>> obterRelatorio(
+            @RequestParam FormaPagamento forma,
+            @RequestParam LocalDateTime dataInicio,
+            @RequestParam LocalDateTime dataFim,
+            @PageableDefault(size = 10) Pageable pageable,
+            @RequestHeader("usuario-email") String email,
+            @RequestHeader("usuario-senha") String senha) {
+
+        UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
+
+        if (!(usuarioDto.papel() == PapelUsuario.GERENTE)) {
+            throw new UnauthorizedException();
+        }
+
+        return ResponseEntity.ok(relatorioService.gerarRelatorioPagamento(forma, dataInicio, dataFim, pageable));
     }
 }

@@ -2,8 +2,13 @@ package br.ifs.edu.cads.api.hotel.repository;
 
 
 import br.ifs.edu.cads.api.hotel.entity.Reserva;
+import br.ifs.edu.cads.api.hotel.enums.FormaPagamento;
+import br.ifs.edu.cads.api.hotel.rest.dto.ReservaPagamentoRelatorioDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +25,22 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             LocalDate dataInicio, LocalDate dataFim, Integer categoriaQuartoId
     );
 
-
     List<Reserva> findReservaByDataInicioBetween(LocalDateTime dataInicioAfter, LocalDateTime dataInicioBefore);
+
+    @Query("""
+        SELECT new br.ifs.edu.cads.api.hotel.rest.dto.ReservaPagamentoRelatorioDto(
+            r.formaPagamento, COUNT(r), SUM(r.valorReserva)
+        )
+        FROM Reserva r
+        WHERE r.statusReserva = br.ifs.edu.cads.api.hotel.enums.StatusReserva.CHECKOUT
+        AND r.formaPagamento = :forma
+        AND r.dataInicio BETWEEN :inicio AND :fim
+        GROUP BY r.formaPagamento
+        ORDER BY SUM(r.valorReserva) DESC
+    """)
+    Page<ReservaPagamentoRelatorioDto> relatorioPorFormaPagamento(
+            @Param("forma") FormaPagamento forma,
+            @Param("inicio") LocalDateTime inicio,
+            @Param("fim") LocalDateTime fim,
+            Pageable pageable);
 }
