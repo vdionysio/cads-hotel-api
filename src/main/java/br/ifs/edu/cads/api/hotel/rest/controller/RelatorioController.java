@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -33,8 +34,8 @@ public class RelatorioController {
 
     @GetMapping("/periodo")
     public ResponseEntity<List<ReservaSimplesDto>> obterRelatorioReservasPorPeriodo(
-            @RequestParam("data-inicial") LocalDate dataInicial,
-            @RequestParam("data-final") LocalDate dataFinal,
+            @RequestParam("data-inicial") LocalDateTime dataInicial,
+            @RequestParam("data-final") LocalDateTime dataFinal,
             @RequestHeader("usuario-email") String email,
             @RequestHeader("usuario-senha") String senha) {
         UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);

@@ -13,6 +13,7 @@ import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.CidadeRepository;
 import br.ifs.edu.cads.api.hotel.repository.HospedeRepository;
 import br.ifs.edu.cads.api.hotel.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +24,14 @@ public class HospedeService {
     private final HospedeRepository hospedeRepository;
     private final CidadeRepository cidadeRepository;
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public HospedeService(HospedeRepository hospedeRepository, CidadeRepository cidadeRepository, HospedeMapper hospedeMapper, UsuarioRepository usuarioRepository) {
+    public HospedeService(HospedeRepository hospedeRepository, CidadeRepository cidadeRepository, HospedeMapper hospedeMapper, UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.hospedeRepository = hospedeRepository;
         this.cidadeRepository = cidadeRepository;
         this.hospedeMapper = hospedeMapper;
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -53,7 +56,7 @@ public class HospedeService {
                 () -> new ResourceNotFoundException("Cidade de ID " + hospedeUsuarioFormDto.dadosPessoais().cidadeId() + " não encontrada.")
         );
 
-        Usuario usuario = new Usuario(hospedeUsuarioFormDto.email(), hospedeUsuarioFormDto.senha(), PapelUsuario.HOSPEDE);
+        Usuario usuario = new Usuario(hospedeUsuarioFormDto.email(), passwordEncoder.encode(hospedeUsuarioFormDto.senha()), PapelUsuario.HOSPEDE);
 
         hospede.setCidade(cidade);
         hospede.setUsuario(usuario);

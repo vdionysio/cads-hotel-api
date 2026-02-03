@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class RelatorioService {
         this.cancelamentoRepository = cancelamentoRepository;
     }
 
-    public List<ReservaSimplesDto> gerarRelatorioReservasPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+    public List<ReservaSimplesDto> gerarRelatorioReservasPorPeriodo(LocalDateTime dataInicial, LocalDateTime dataFinal) {
         List<Reserva> reservas = reservaRepository.findReservaByDataInicioBetween(dataInicial, dataFinal);
 
         return reservas.stream().map(reservaMapper::toDtoSimples).toList();

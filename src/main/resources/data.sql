@@ -38,13 +38,13 @@ INSERT INTO CIDADE (NOME_CIDADE, UF) VALUES
 -- ==================================================================================
 INSERT INTO USUARIO (ATIVO, EMAIL, SENHA, PAPEL_USUARIO) VALUES
 -- Staff
-(TRUE, 'admin@hotel.com', '123456', 'GERENTE'),
-(TRUE, 'lucio@hotel.com', '123456', 'RECEPCIONISTA'),
-(TRUE, 'ana@hotel.com', '123456', 'RECEPCIONISTA'),
+(TRUE, 'admin@hotel.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'GERENTE'),
+(TRUE, 'lucio@hotel.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'RECEPCIONISTA'),
+(TRUE, 'ana@hotel.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'RECEPCIONISTA'),
 -- Hóspedes com acesso ao sistema
-(TRUE, 'roberto@gmail.com', '123456', 'HOSPEDE'),
-(TRUE, 'fernanda@gmail.com', '123456', 'HOSPEDE'),
-(TRUE, 'joao.silva@hotmail.com', '123456', 'HOSPEDE');
+(TRUE, 'roberto@gmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE'),
+(TRUE, 'fernanda@gmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE'),
+(TRUE, 'joao.silva@hotmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE');
 
 -- ==================================================================================
 -- 4. FUNCIONÁRIOS

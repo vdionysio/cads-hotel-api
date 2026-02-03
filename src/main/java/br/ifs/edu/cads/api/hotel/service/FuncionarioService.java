@@ -7,6 +7,7 @@ import br.ifs.edu.cads.api.hotel.entity.Funcionario;
 import br.ifs.edu.cads.api.hotel.entity.Usuario;
 import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.FuncionarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +17,12 @@ import java.util.List;
 public class FuncionarioService {
     private final FuncionarioRepository funcionarioRepository;
     private final FuncionarioMapper funcionarioMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper, PasswordEncoder passwordEncoder) {
         this.funcionarioRepository = funcionarioRepository;
         this.funcionarioMapper = funcionarioMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<FuncionarioDto> getFuncionarios() {
@@ -34,7 +37,7 @@ public class FuncionarioService {
     public FuncionarioDto createFuncionario(FuncionarioFormDto funcionarioFormDto) {
         Funcionario funcionario = funcionarioMapper.formToEntity(funcionarioFormDto);
 
-        Usuario usuario = new Usuario(funcionarioFormDto.email(), funcionarioFormDto.senha(), funcionarioFormDto.cargo());
+        Usuario usuario = new Usuario(funcionarioFormDto.email(), passwordEncoder.encode(funcionarioFormDto.senha()), funcionarioFormDto.cargo());
 
         funcionario.setUsuario(usuario);
 

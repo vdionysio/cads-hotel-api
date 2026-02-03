@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
@@ -20,5 +21,5 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     );
 
 
-    List<Reserva> findReservaByDataInicioBetween(LocalDate dataInicioAfter, LocalDate dataInicioBefore);
+    List<Reserva> findReservaByDataInicioBetween(LocalDateTime dataInicioAfter, LocalDateTime dataInicioBefore);
 }
