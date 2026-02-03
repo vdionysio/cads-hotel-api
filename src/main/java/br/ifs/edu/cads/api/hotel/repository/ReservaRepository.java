@@ -34,13 +34,20 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
         FROM Reserva r
         WHERE r.statusReserva = br.ifs.edu.cads.api.hotel.enums.StatusReserva.CHECKOUT
         AND r.formaPagamento = :forma
-        AND r.dataInicio BETWEEN :inicio AND :fim
+        AND r.dataInicio BETWEEN :dataInicio AND :datafim
         GROUP BY r.formaPagamento
         ORDER BY SUM(r.valorReserva) DESC
     """)
     Page<ReservaPagamentoRelatorioDto> relatorioPorFormaPagamento(
             @Param("forma") FormaPagamento forma,
-            @Param("inicio") LocalDateTime inicio,
-            @Param("fim") LocalDateTime fim,
-            Pageable pageable);
+            @Param("inicio") LocalDateTime dataInicio,
+            @Param("fim") LocalDateTime datafim,
+    Pageable pageable);
+
+    @Query("""
+        SELECT r FROM Reserva r
+        WHERE r.statusReserva <> br.ifs.edu.cads.api.hotel.enums.StatusReserva.CANCELADO
+        AND r.dataInicio BETWEEN :dataInicio AND :datafim
+    """)
+    List<Reserva> findReservasAtivas(LocalDateTime dataInicio, LocalDateTime datafim);
 }

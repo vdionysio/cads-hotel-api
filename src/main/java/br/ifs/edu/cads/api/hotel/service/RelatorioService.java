@@ -1,5 +1,6 @@
 package br.ifs.edu.cads.api.hotel.service;
 
+import br.ifs.edu.cads.api.hotel.entity.Cancelamento;
 import br.ifs.edu.cads.api.hotel.enums.FormaPagamento;
 import br.ifs.edu.cads.api.hotel.repository.HospedeRepository;
 import br.ifs.edu.cads.api.hotel.rest.dto.*;
@@ -11,11 +12,13 @@ import br.ifs.edu.cads.api.hotel.enums.StatusRelatorioOcupacao;
 import br.ifs.edu.cads.api.hotel.repository.CancelamentoRepository;
 import br.ifs.edu.cads.api.hotel.repository.QuartoRepository;
 import br.ifs.edu.cads.api.hotel.repository.ReservaRepository;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -93,5 +96,34 @@ public class RelatorioService {
 
     public Page<ReservaPagamentoRelatorioDto> gerarRelatorioPagamento(FormaPagamento forma, LocalDateTime dataInicio,LocalDateTime dataFim, Pageable pageable) {
         return reservaRepository.relatorioPorFormaPagamento(forma, dataInicio, dataFim, pageable);
+    }
+
+    public FaturamentoDTO calcularFaturamento(LocalDateTime dataInicio, LocalDateTime dataFim) {
+        List<Reserva> reservasAtivas = reservaRepository.findReservasAtivas(dataInicio, dataFim);
+        List<Cancelamento> cancelamentos = cancelamentoRepository.findByDataCancelamentoBetween(dataInicio, dataFim);
+
+        BigDecimal totalReservas = BigDecimal.ZERO;
+        BigDecimal totalDescontos = BigDecimal.ZERO;
+
+        for (Reserva r : reservasAtivas) {
+            BigDecimal valorBase = r.getValorReserva();
+            totalReservas = totalReservas.add(valorBase);
+
+            DayOfWeek dia = r.getDataInicio().getDayOfWeek();
+            // desconto seg a qui
+            if (dia.getValue() >= DayOfWeek.MONDAY.getValue() && dia.getValue() <= DayOfWeek.THURSDAY.getValue()) {
+                BigDecimal desconto = valorBase.multiply(new BigDecimal("0.20"));
+                totalDescontos = totalDescontos.add(desconto);
+            }
+        }
+
+        BigDecimal totalMultas = cancelamentos.stream()
+                .map(Cancelamento::getValorMulta)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal brutoTotal = totalReservas.add(totalMultas);
+        BigDecimal liquidoTotal = brutoTotal.subtract(totalDescontos);
+
+        return new FaturamentoDTO(brutoTotal, totalDescontos, liquidoTotal);
     }
 }

@@ -7,13 +7,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface CancelamentoRepository extends JpaRepository<Cancelamento, Long> {
 
     Page<Cancelamento> findByDataCancelamentoBetweenAndValorMultaGreaterThan(
-            LocalDateTime inicio,
-            LocalDateTime fim,
+            LocalDateTime dataInicio,
+            LocalDateTime dataFim,
             BigDecimal valorMinimo,
             Pageable pageable
     );
+
+    List<Cancelamento> findByDataCancelamentoBetween(LocalDateTime dataInicio, LocalDateTime dataFim);
 }

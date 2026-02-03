@@ -114,4 +114,19 @@ public class RelatorioController {
 
         return ResponseEntity.ok(relatorioService.gerarRelatorioPagamento(forma, dataInicio, dataFim, pageable));
     }
+
+    @GetMapping("/faturamento")
+    public ResponseEntity<FaturamentoDTO> obterFaturamento(
+            @RequestParam LocalDateTime dataInicio,
+            @RequestParam LocalDateTime dataFim,
+            @RequestHeader("usuario-email") String email,
+            @RequestHeader("usuario-senha") String senha) {
+        UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
+
+        if (!(usuarioDto.papel() == PapelUsuario.GERENTE)) {
+            throw new UnauthorizedException();
+        }
+
+        return ResponseEntity.ok(relatorioService.calcularFaturamento(dataInicio, dataFim));
+    }
 }
