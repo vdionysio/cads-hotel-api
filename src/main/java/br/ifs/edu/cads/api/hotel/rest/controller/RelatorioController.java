@@ -100,8 +100,8 @@ public class RelatorioController {
     @GetMapping("/pagamentos")
     public ResponseEntity<Page<ReservaPagamentoRelatorioDto>> obterRelatorio(
             @RequestParam FormaPagamento forma,
-            @RequestParam LocalDateTime dataInicio,
-            @RequestParam LocalDateTime dataFim,
+            @RequestParam("data-inicial") LocalDateTime dataInicio,
+            @RequestParam("data-final") LocalDateTime dataFim,
             @PageableDefault(size = 10) Pageable pageable,
             @RequestHeader("usuario-email") String email,
             @RequestHeader("usuario-senha") String senha) {
@@ -117,8 +117,8 @@ public class RelatorioController {
 
     @GetMapping("/faturamento")
     public ResponseEntity<FaturamentoDTO> obterFaturamento(
-            @RequestParam LocalDateTime dataInicio,
-            @RequestParam LocalDateTime dataFim,
+            @RequestParam("data-inicial") LocalDateTime dataInicio,
+            @RequestParam("data-final") LocalDateTime dataFim,
             @RequestHeader("usuario-email") String email,
             @RequestHeader("usuario-senha") String senha) {
         UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
