@@ -1,10 +1,7 @@
 package br.ifs.edu.cads.api.hotel.rest.controller;
 
 import br.ifs.edu.cads.api.hotel.exception.UnauthorizedException;
-import br.ifs.edu.cads.api.hotel.rest.dto.CancelamentoComMultaDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.QuartoOcupacaoDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.ReservaSimplesDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.UsuarioDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.*;
 import br.ifs.edu.cads.api.hotel.enums.PapelUsuario;
 import br.ifs.edu.cads.api.hotel.enums.StatusRelatorioOcupacao;
 import br.ifs.edu.cads.api.hotel.service.RelatorioService;
@@ -83,5 +80,19 @@ public class RelatorioController {
 
         Page<CancelamentoComMultaDto> relatorio = relatorioService.gerarRelatorioMultas(dataInicial, dataFinal, pageable);
         return ResponseEntity.ok(relatorio);
+    }
+
+    @GetMapping("/hospedes-ativos")
+    public ResponseEntity<List<HospedeUsuarioRelatorioDto>> obterHospedesAtivos(
+            @RequestHeader("usuario-email") String email,
+            @RequestHeader("usuario-senha") String senha
+    ) {
+        UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
+
+        if (!(usuarioDto.papel() == PapelUsuario.GERENTE || usuarioDto.papel() == PapelUsuario.RECEPCIONISTA)) {
+            throw new UnauthorizedException();
+        }
+
+        return ResponseEntity.ok(relatorioService.listarHospedesAtivos());
     }
 }

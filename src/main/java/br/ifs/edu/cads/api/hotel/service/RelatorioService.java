@@ -1,9 +1,8 @@
 package br.ifs.edu.cads.api.hotel.service;
 
-import br.ifs.edu.cads.api.hotel.rest.dto.CancelamentoComMultaDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.QuartoReservaDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.QuartoOcupacaoDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.ReservaSimplesDto;
+import br.ifs.edu.cads.api.hotel.repository.HospedeRepository;
+import br.ifs.edu.cads.api.hotel.rest.dto.*;
+import br.ifs.edu.cads.api.hotel.rest.dto.mapper.HospedeMapper;
 import br.ifs.edu.cads.api.hotel.rest.dto.mapper.ReservaMapper;
 import br.ifs.edu.cads.api.hotel.entity.Quarto;
 import br.ifs.edu.cads.api.hotel.entity.Reserva;
@@ -28,12 +27,16 @@ public class RelatorioService {
     private final ReservaMapper reservaMapper;
     private final QuartoRepository quartoRepository;
     private final CancelamentoRepository cancelamentoRepository;
+    private final HospedeRepository hospedeRepository;
+    private final HospedeMapper hospedeMapper;
 
-    public RelatorioService(ReservaRepository reservaRepository, ReservaMapper reservaMapper, QuartoRepository quartoRepository, CancelamentoRepository cancelamentoRepository) {
+    public RelatorioService(ReservaRepository reservaRepository, ReservaMapper reservaMapper, QuartoRepository quartoRepository, CancelamentoRepository cancelamentoRepository, HospedeRepository hospedeRepository, HospedeMapper hospedeMapper) {
         this.reservaRepository = reservaRepository;
         this.reservaMapper = reservaMapper;
         this.quartoRepository = quartoRepository;
         this.cancelamentoRepository = cancelamentoRepository;
+        this.hospedeRepository = hospedeRepository;
+        this.hospedeMapper = hospedeMapper;
     }
 
     public List<ReservaSimplesDto> gerarRelatorioReservasPorPeriodo(LocalDateTime dataInicial, LocalDateTime dataFinal) {
@@ -81,5 +84,9 @@ public class RelatorioService {
                 c.getDataCancelamento(),
                 c.getValorMulta()
         ));
+    }
+
+    public List<HospedeUsuarioRelatorioDto> listarHospedesAtivos() {
+        return hospedeRepository.findByUsuarioAtivoTrue().stream().map(hospedeMapper::toRelatorioDto).toList();
     }
 }

@@ -1,9 +1,6 @@
 package br.ifs.edu.cads.api.hotel.rest.dto.mapper;
 
-import br.ifs.edu.cads.api.hotel.rest.dto.HospedeDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.HospedeFormDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.HospedeUsuarioDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.HospedeUsuarioFormDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.*;
 import br.ifs.edu.cads.api.hotel.entity.Hospede;
 import org.springframework.stereotype.Component;
 
@@ -43,6 +40,15 @@ public class HospedeMapper {
                 hospedeUsuarioFormDto.dadosPessoais().cpf(),
                 hospedeUsuarioFormDto.dadosPessoais().dataNascimento(),
                 hospedeUsuarioFormDto.dadosPessoais().telefone()
+        );
+    }
+
+    public HospedeUsuarioRelatorioDto toRelatorioDto(Hospede hospede) {
+        return new HospedeUsuarioRelatorioDto(
+                hospede.getNome(),
+                hospede.getUsuario().getEmail(),
+                hospede.getTelefone(),
+                hospede.getCidade().getNome() + "/" + hospede.getCidade().getEstado().getUf()
         );
     }
 }

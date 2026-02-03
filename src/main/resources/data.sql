@@ -44,7 +44,10 @@ INSERT INTO USUARIO (ATIVO, EMAIL, SENHA, PAPEL_USUARIO) VALUES
 -- Hóspedes com acesso ao sistema
 (TRUE, 'roberto@gmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE'),
 (TRUE, 'fernanda@gmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE'),
-(TRUE, 'joao.silva@hotmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE');
+(TRUE, 'joao.silva@hotmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE'),
+-- Usuarios desativados
+(FALSE, 'desativado1@gmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE'),
+(FALSE, 'desativado2@gmail.com', '$2a$10$hb71brRKDe3VyiLuOiLYG.Buuov4skVOw5Gp5ORWBPK80nfFogb7u', 'HOSPEDE');
 
 -- ==================================================================================
 -- 4. FUNCIONÁRIOS
@@ -65,7 +68,10 @@ INSERT INTO HOSPEDE (NOME_HOSPEDE, CPF_HOSPEDE, DATA_NASCIMENTO, TELEFONE_HOSPED
 ('João Silva', '999.888.777-66', '1980-12-10', '(11) 98888-7777', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'São Paulo'), (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'joao.silva@hotmail.com')),
 -- Hóspedes sem Login (Cadastrados na recepção)
 ('Maria Oliveira', '555.444.333-22', '1975-03-25', '(21) 97777-6666', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Rio de Janeiro'), NULL),
-('Pedro Santos', '111.222.333-44', '1990-07-07', '(31) 96666-5555', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Belo Horizonte'), NULL);
+('Pedro Santos', '111.222.333-44', '1990-07-07', '(31) 96666-5555', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Belo Horizonte'), NULL),
+
+('Desativado 1', '888.444.333-22', '1975-03-25', '(21) 99777-6666', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Rio de Janeiro'), (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'desativado1@gmail.com')),
+('Desativado 2', '888.222.333-44', '1990-07-07', '(31) 99666-5555', (SELECT ID_CIDADE FROM CIDADE WHERE NOME_CIDADE = 'Belo Horizonte'), (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL = 'desativado2@gmail.com'));
 
 -- ==================================================================================
 -- 6. COMODIDADES E CATEGORIAS
