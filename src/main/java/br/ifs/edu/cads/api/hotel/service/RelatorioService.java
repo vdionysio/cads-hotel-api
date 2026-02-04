@@ -18,10 +18,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -102,18 +104,27 @@ public class RelatorioService {
         List<Reserva> reservasAtivas = reservaRepository.findReservasAtivas(dataInicio, dataFim);
         List<Cancelamento> cancelamentos = cancelamentoRepository.findByDataCancelamentoBetween(dataInicio, dataFim);
 
-        BigDecimal totalReservas = BigDecimal.ZERO;
+        BigDecimal totalBrutoDiarias = BigDecimal.ZERO;
         BigDecimal totalDescontos = BigDecimal.ZERO;
 
         for (Reserva r : reservasAtivas) {
-            BigDecimal valorBase = r.getValorReserva();
-            totalReservas = totalReservas.add(valorBase);
+            long totalNoites = ChronoUnit.DAYS.between(r.getDataInicio().toLocalDate(), r.getDataFim().toLocalDate());
 
-            DayOfWeek dia = r.getDataInicio().getDayOfWeek();
-            // desconto seg a qui
-            if (dia.getValue() >= DayOfWeek.MONDAY.getValue() && dia.getValue() <= DayOfWeek.THURSDAY.getValue()) {
-                BigDecimal desconto = valorBase.multiply(new BigDecimal("0.20"));
-                totalDescontos = totalDescontos.add(desconto);
+            BigDecimal valorDiariaComum = r.getValorReserva().divide(BigDecimal.valueOf(totalNoites), 2, RoundingMode.HALF_UP);
+
+            LocalDate dataAtual = r.getDataInicio().toLocalDate();
+            while (dataAtual.isBefore(r.getDataFim().toLocalDate())) {
+
+                totalBrutoDiarias = totalBrutoDiarias.add(valorDiariaComum);
+
+                DayOfWeek dia = dataAtual.getDayOfWeek();
+
+                if (dia != DayOfWeek.FRIDAY && dia != DayOfWeek.SATURDAY && dia != DayOfWeek.SUNDAY) {
+                    BigDecimal descontoNoite = valorDiariaComum.multiply(new BigDecimal("0.20"));
+                    totalDescontos = totalDescontos.add(descontoNoite);
+                }
+
+                dataAtual = dataAtual.plusDays(1);
             }
         }
 
@@ -121,9 +132,9 @@ public class RelatorioService {
                 .map(Cancelamento::getValorMulta)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal brutoTotal = totalReservas.add(totalMultas);
-        BigDecimal liquidoTotal = brutoTotal.subtract(totalDescontos);
+        BigDecimal brutoFinal = totalBrutoDiarias.add(totalMultas);
+        BigDecimal liquidoFinal = brutoFinal.subtract(totalDescontos);
 
-        return new FaturamentoDTO(brutoTotal, totalDescontos, liquidoTotal);
+        return new FaturamentoDTO(brutoFinal, totalDescontos, liquidoFinal);
     }
 }
