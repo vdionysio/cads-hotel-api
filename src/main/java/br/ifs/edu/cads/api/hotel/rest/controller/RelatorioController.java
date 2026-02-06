@@ -8,6 +8,7 @@ import br.ifs.edu.cads.api.hotel.enums.StatusRelatorioOcupacao;
 import br.ifs.edu.cads.api.hotel.service.RelatorioService;
 import br.ifs.edu.cads.api.hotel.service.UsuarioService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -61,8 +62,7 @@ public class RelatorioController {
             throw new UnauthorizedException();
         }
 
-        Page<QuartoOcupacaoDto> relatorio = relatorioService.gerarRelatorioOcupacao(idCategoriaQuarto, status, pageable);
-        return ResponseEntity.ok(relatorio);
+        return ResponseEntity.ok(relatorioService.gerarRelatorioOcupacao(idCategoriaQuarto, status, pageable));
     }
 
     @GetMapping("/cancelamentos-multa")
@@ -79,8 +79,7 @@ public class RelatorioController {
             throw new UnauthorizedException();
         }
 
-        Page<CancelamentoComMultaDto> relatorio = relatorioService.gerarRelatorioMultas(dataInicial, dataFinal, pageable);
-        return ResponseEntity.ok(relatorio);
+        return ResponseEntity.ok(relatorioService.gerarRelatorioMultas(dataInicial, dataFinal, pageable));
     }
 
     @GetMapping("/hospedes-ativos")
@@ -98,7 +97,7 @@ public class RelatorioController {
     }
 
     @GetMapping("/pagamentos")
-    public ResponseEntity<Page<ReservaPagamentoRelatorioDto>> obterRelatorio(
+    public ResponseEntity<Page<ReservaPagamentoRelatorioDto>> obterRelatorioPagamento(
             @RequestParam FormaPagamento forma,
             @RequestParam("data-inicial") LocalDateTime dataInicio,
             @RequestParam("data-final") LocalDateTime dataFim,
@@ -128,5 +127,26 @@ public class RelatorioController {
         }
 
         return ResponseEntity.ok(relatorioService.calcularFaturamento(dataInicio, dataFim));
+    }
+
+    @GetMapping("/hospede/{idHospede}")
+    public ResponseEntity<Page<ReservaRelatorioHospedeDto>> obterHistoricoHospede(
+            @PathVariable Long idHospede,
+            @PageableDefault(size = 10) Pageable pageable,
+            @RequestHeader("usuario-email") String email,
+            @RequestHeader("usuario-senha") String senha) {
+        UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
+
+        if (!(usuarioDto.papel() == PapelUsuario.GERENTE || usuarioDto.papel() == PapelUsuario.RECEPCIONISTA)) {
+            throw new UnauthorizedException();
+        }
+
+        Pageable customPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("dataInicio").descending()
+        );
+
+        return ResponseEntity.ok(relatorioService.gerarHistoricoHospede(idHospede, customPageable));
     }
 }

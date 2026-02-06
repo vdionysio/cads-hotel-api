@@ -1,9 +1,11 @@
 package br.ifs.edu.cads.api.hotel.repository;
 
 
+import br.ifs.edu.cads.api.hotel.entity.Hospede;
 import br.ifs.edu.cads.api.hotel.entity.Reserva;
 import br.ifs.edu.cads.api.hotel.enums.FormaPagamento;
 import br.ifs.edu.cads.api.hotel.rest.dto.ReservaPagamentoRelatorioDto;
+import br.ifs.edu.cads.api.hotel.rest.dto.ReservaRelatorioHospedeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -50,4 +52,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
         AND r.dataInicio BETWEEN :dataInicio AND :dataFim
     """)
     List<Reserva> findReservasAtivas(LocalDateTime dataInicio, LocalDateTime dataFim);
+
+    Page<Reserva> findByHospede(Hospede hospede, Pageable pageable);
 }

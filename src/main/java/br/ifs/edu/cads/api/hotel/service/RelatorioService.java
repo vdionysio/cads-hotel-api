@@ -1,7 +1,10 @@
 package br.ifs.edu.cads.api.hotel.service;
 
 import br.ifs.edu.cads.api.hotel.entity.Cancelamento;
+import br.ifs.edu.cads.api.hotel.entity.Hospede;
 import br.ifs.edu.cads.api.hotel.enums.FormaPagamento;
+import br.ifs.edu.cads.api.hotel.enums.StatusReserva;
+import br.ifs.edu.cads.api.hotel.exception.ResourceNotFoundException;
 import br.ifs.edu.cads.api.hotel.repository.HospedeRepository;
 import br.ifs.edu.cads.api.hotel.rest.dto.*;
 import br.ifs.edu.cads.api.hotel.rest.dto.mapper.HospedeMapper;
@@ -12,10 +15,10 @@ import br.ifs.edu.cads.api.hotel.enums.StatusRelatorioOcupacao;
 import br.ifs.edu.cads.api.hotel.repository.CancelamentoRepository;
 import br.ifs.edu.cads.api.hotel.repository.QuartoRepository;
 import br.ifs.edu.cads.api.hotel.repository.ReservaRepository;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RelatorioService {
@@ -136,5 +140,44 @@ public class RelatorioService {
         BigDecimal liquidoFinal = brutoFinal.subtract(totalDescontos);
 
         return new FaturamentoDTO(brutoFinal, totalDescontos, liquidoFinal);
+    }
+
+    public Page<ReservaRelatorioHospedeDto> gerarHistoricoHospede(Long idHospede, Pageable pageable) {
+        Hospede hospede = hospedeRepository.findById(idHospede).orElseThrow(
+                () -> new ResourceNotFoundException("Hospede de ID " + idHospede + " não encontrado.")
+        );
+
+        if (hospede.getUsuario() == null) {
+            throw new ResourceNotFoundException("Hospede de ID " + idHospede + " não possui reservas como titular.");
+        }
+
+        Page<Reserva> reservasHospede = reservaRepository.findByHospede(hospede, pageable);
+
+        Page<ReservaRelatorioHospedeDto> reservasHospedeDto = reservasHospede.map(r -> {
+                BigDecimal valorPago = r.getValorReserva();
+
+                if (r.getStatusReserva().equals(StatusReserva.CANCELADO)) {
+
+                    Optional<Cancelamento> cancelamento = cancelamentoRepository.findByReserva(r);
+
+                    if (cancelamento.isEmpty()) {
+                        // nao é o esperado, decidido por setar como zero inves de jogar um erro
+                        valorPago = BigDecimal.ZERO;
+                    } else {
+                        valorPago = cancelamento.get().getValorMulta();
+                    }
+                }
+                return new ReservaRelatorioHospedeDto(
+                        r.getDataInicio(),
+                        r.getDataFim(),
+                        r.getDataCheckIn(),
+                        r.getDataCheckOut(),
+                        r.getCategoriaQuarto().getNome(),
+                        r.getStatusReserva(),
+                        valorPago
+                );
+        });
+
+        return reservasHospedeDto;
     }
 }
