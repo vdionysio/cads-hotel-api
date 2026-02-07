@@ -4,8 +4,8 @@ package br.ifs.edu.cads.api.hotel.repository;
 import br.ifs.edu.cads.api.hotel.entity.Hospede;
 import br.ifs.edu.cads.api.hotel.entity.Reserva;
 import br.ifs.edu.cads.api.hotel.enums.FormaPagamento;
+import br.ifs.edu.cads.api.hotel.rest.dto.RelatorioUtilizacaoCategoriaDto;
 import br.ifs.edu.cads.api.hotel.rest.dto.ReservaPagamentoRelatorioDto;
-import br.ifs.edu.cads.api.hotel.rest.dto.ReservaRelatorioHospedeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -54,4 +54,18 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     List<Reserva> findReservasAtivas(LocalDateTime dataInicio, LocalDateTime dataFim);
 
     Page<Reserva> findByHospede(Hospede hospede, Pageable pageable);
+
+    @Query("""
+        SELECT new br.ifs.edu.cads.api.hotel.rest.dto.RelatorioUtilizacaoCategoriaDto(
+            r.categoriaQuarto.nome, COUNT(r), ""
+        )
+        FROM Reserva r
+        WHERE r.statusReserva = br.ifs.edu.cads.api.hotel.enums.StatusReserva.CHECKOUT
+        AND r.dataInicio BETWEEN :dataInicio AND :dataFim
+        GROUP BY r.categoriaQuarto.nome
+    """)
+    List<RelatorioUtilizacaoCategoriaDto> relatorioUtilizacaoCategoria(
+            @Param("dataInicio") LocalDateTime dataInicio,
+            @Param("dataFim") LocalDateTime dataFim
+    );
 }

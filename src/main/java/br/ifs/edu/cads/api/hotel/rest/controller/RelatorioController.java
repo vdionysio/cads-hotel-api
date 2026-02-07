@@ -149,4 +149,21 @@ public class RelatorioController {
 
         return ResponseEntity.ok(relatorioService.gerarHistoricoHospede(idHospede, customPageable));
     }
+
+    @GetMapping("/categoria")
+    public ResponseEntity<List<RelatorioUtilizacaoCategoriaDto>> obterRelatorioUtilizacaoCategoria(
+            @RequestParam("data-inicial") LocalDateTime dataInicio,
+            @RequestParam("data-final") LocalDateTime dataFim,
+            @RequestHeader("usuario-email") String email,
+            @RequestHeader("usuario-senha") String senha) {
+        UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
+
+        if (!(usuarioDto.papel() == PapelUsuario.GERENTE)) {
+            throw new UnauthorizedException();
+        }
+
+        return ResponseEntity.ok(relatorioService.gerarRelatorioUtilizacaoCategoria(dataInicio, dataFim));
+    }
+
+
 }

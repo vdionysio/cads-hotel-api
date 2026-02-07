@@ -45,4 +45,6 @@ public interface QuartoRepository extends JpaRepository<Quarto, Integer> {
             Pageable pageable);
 
     Integer countQuartosByCategoriaId(Integer categoriaId);
+
+    long countQuartosByCategoriaNome(String categoriaNome);
 }

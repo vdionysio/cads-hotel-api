@@ -142,6 +142,7 @@ public class RelatorioService {
         return new FaturamentoDTO(brutoFinal, totalDescontos, liquidoFinal);
     }
 
+    @Transactional(readOnly = true)
     public Page<ReservaRelatorioHospedeDto> gerarHistoricoHospede(Long idHospede, Pageable pageable) {
         Hospede hospede = hospedeRepository.findById(idHospede).orElseThrow(
                 () -> new ResourceNotFoundException("Hospede de ID " + idHospede + " não encontrado.")
@@ -179,5 +180,21 @@ public class RelatorioService {
         });
 
         return reservasHospedeDto;
+    }
+
+    @Transactional(readOnly = true)
+    public List<RelatorioUtilizacaoCategoriaDto> gerarRelatorioUtilizacaoCategoria(LocalDateTime dataInicio, LocalDateTime dataFim) {
+
+        List<RelatorioUtilizacaoCategoriaDto> relatorioUtilizacaoCategoriaDtos = reservaRepository.relatorioUtilizacaoCategoria(dataInicio,dataFim);
+
+        System.out.println("PRINTTTTTT");
+        System.out.println(quartoRepository.countQuartosByCategoriaNome("Presidencial"));
+        System.out.println("MAAASTEEERR");
+        System.out.println(quartoRepository.countQuartosByCategoriaNome("Master"));
+        return relatorioUtilizacaoCategoriaDtos.stream().map(cat -> new RelatorioUtilizacaoCategoriaDto(
+                cat.categoria(),
+                cat.totalReservas(),
+                String.format("%.2f%%", (cat.totalReservas()/ (double)  quartoRepository.countQuartosByCategoriaNome(cat.categoria())) *100.0)))
+                .toList();
     }
 }
