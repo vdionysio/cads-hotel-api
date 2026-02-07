@@ -166,4 +166,23 @@ public class RelatorioController {
     }
 
 
+    @GetMapping("/gerencial")
+    public ResponseEntity<RelatorioGerencialDTO> obterRelatorioGerencial(
+            @RequestParam(value = "data-inicial", required = false) LocalDateTime dataInicio,
+            @RequestParam(value = "data-final", required = false) LocalDateTime dataFim,
+            @PageableDefault(size = 10) Pageable pageable,
+            @RequestHeader("usuario-email") String email,
+            @RequestHeader("usuario-senha") String senha) {
+
+        UsuarioDto usuarioDto = usuarioService.autenticarUsuario(email, senha);
+        if (!(usuarioDto.papel() == PapelUsuario.GERENTE)) {
+            throw new UnauthorizedException();
+        }
+
+        // se nenhuma data é passada vai trazer os dados do mes atual. Decisão para nao subestimar o valor da ocupação média.
+        LocalDateTime dataInicioSetada = (dataInicio != null) ? dataInicio : LocalDateTime.now().withDayOfMonth(1);
+        LocalDateTime dataFimSetada = (dataFim != null) ? dataFim : LocalDateTime.now();
+
+        return ResponseEntity.ok(relatorioService.gerarRelatorioCompleto(dataInicioSetada, dataFimSetada, pageable));
+    }
 }

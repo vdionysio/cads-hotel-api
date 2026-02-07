@@ -187,14 +187,51 @@ public class RelatorioService {
 
         List<RelatorioUtilizacaoCategoriaDto> relatorioUtilizacaoCategoriaDtos = reservaRepository.relatorioUtilizacaoCategoria(dataInicio,dataFim);
 
-        System.out.println("PRINTTTTTT");
-        System.out.println(quartoRepository.countQuartosByCategoriaNome("Presidencial"));
-        System.out.println("MAAASTEEERR");
-        System.out.println(quartoRepository.countQuartosByCategoriaNome("Master"));
         return relatorioUtilizacaoCategoriaDtos.stream().map(cat -> new RelatorioUtilizacaoCategoriaDto(
                 cat.categoria(),
                 cat.totalReservas(),
                 String.format("%.2f%%", (cat.totalReservas()/ (double)  quartoRepository.countQuartosByCategoriaNome(cat.categoria())) *100.0)))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public RelatorioGerencialDTO gerarRelatorioCompleto(LocalDateTime dataInicio, LocalDateTime dataFim, Pageable pageable) {
+        // Financeira
+        FaturamentoDTO faturamento = calcularFaturamento(dataInicio, dataFim);
+
+        long totalCancelamentos = cancelamentoRepository.findByDataCancelamentoBetween(dataInicio, dataFim).size();
+        long totalReservas = reservaRepository.findReservasAtivas(dataInicio, dataFim).size();
+
+        // Ocupação
+        long totalQuartos = quartoRepository.count();
+        long diasPeriodo = ChronoUnit.DAYS.between(dataInicio, dataFim) + 1;
+        long capacidadeTotalNoites = totalQuartos * diasPeriodo;
+        long noitesOcupadas = reservaRepository.findReservasAtivas(dataInicio, dataFim).stream()
+                .mapToLong(r -> Math.max(1, ChronoUnit.DAYS.between(r.getDataInicio(), r.getDataFim())))
+                .sum();
+
+        String taxaOcupacao = String.format("%.2f%%", capacidadeTotalNoites > 0 ? (double) noitesOcupadas / capacidadeTotalNoites * 100 : 0);
+
+        // Utilizacao/Rentabilidade Categoria
+        List<RelatorioUtilizacaoCategoriaDto> rentabilidade = gerarRelatorioUtilizacaoCategoria(dataInicio, dataFim);
+
+        // Movimentação
+        Page<Reserva> reservasPage = reservaRepository.findAll(pageable);
+        Page<MovimentacaoDTO> movimentacoes = reservasPage.map(r -> new MovimentacaoDTO(
+                mascarar(r.getHospede().getNome()),
+                r.getCategoriaQuarto().getNome(),
+                r.getStatusReserva(),
+                r.getValorReserva()
+        ));
+
+        return new RelatorioGerencialDTO(
+                new ResumoGeralDTO(totalReservas, totalCancelamentos, faturamento.totalBruto(), faturamento.totalLiquido(), taxaOcupacao),
+                rentabilidade,
+                movimentacoes
+        );
+    }
+
+    private String mascarar(String nome) {
+        return nome.substring(0, 3) + "*".repeat(nome.length() - 3);
     }
 }
